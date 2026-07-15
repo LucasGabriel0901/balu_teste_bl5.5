@@ -1,0 +1,53 @@
+# Dependências
+
+node_modules/
+
+# Variáveis de ambiente
+
+.env
+.env.local
+.env.production
+
+# Logs
+
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema operacional
+
+.DS_Store
+Thumbs.db
+
+# Configurações locais do editor
+
+.vscode/
+.idea/
+
+# Arquivos temporários
+
+*.tmp
+*.temp
+.cache/
+
+# Backups
+
+*.bak
+*.backup
+
+# Uploads locais de teste
+
+uploads/
+temp/
+
+# Banco local
+
+*.sqlite
+*.db
+
+# Arquivos sensíveis
+
+config.local.php
+database.local.php
+secrets.php

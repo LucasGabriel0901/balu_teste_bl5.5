@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+  <title>Vendas do Mês | BALU Food</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/banners.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+  <link rel="stylesheet" href="../css/estoque.css">
+</head>
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+        <div class="page-header">
+          <div>
+            <h1>Vendas do Mês</h1>
+            <p>Registre uma vez por mês a quantidade vendida de cada receita. O BALU calcula o CMV teórico e compara com o CMV real.</p>
+          </div>
+          <div class="page-actions">
+            <button type="button" class="btn btn-primary" id="btnNovoFechamentoVendas"><i data-lucide="plus"></i> Novo Fechamento de Vendas</button>
+          </div>
+        </div>
+
+        <div class="page-note strategy-note">
+          <div><strong>Não é PDV:</strong><span>o cliente não lança venda por venda. Ele informa somente quantas unidades vendeu no mês para calcular o consumo teórico.</span></div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card green"><span>CMV teórico total</span><strong id="vendasCmvTeorico">R$ 0,00</strong><small>Quantidade vendida × custo da ficha.</small></div>
+          <div class="kpi-card purple"><span>CMV real</span><strong id="vendasCmvReal">R$ 0,00</strong><small>Inventário + compras.</small></div>
+          <div class="kpi-card orange"><span>Diferença / perdas</span><strong id="vendasPerdas">R$ 0,00</strong><small>CMV real - CMV teórico.</small></div>
+          <div class="kpi-card red"><span>% de perdas</span><strong id="vendasPercentualPerdas">0,00%</strong><small>Perdas sobre o CMV real.</small></div>
+        </div>
+
+        <div class="finance-panel">
+          <div class="finance-panel-header"><div><h2>Comparação gerencial</h2><p>Quando o real fica acima do teórico, o sistema indica desperdícios, falhas de processo ou ficha desatualizada.</p></div><span class="badge purple">Teórico × Real</span></div>
+          <div class="category-summary">
+            <div class="category-card"><span>CMV Produção</span><strong id="vendasCmvProducao">R$ 0,00</strong><small>Receitas produzidas.</small></div>
+            <div class="category-card"><span>CMV Revenda</span><strong id="vendasCmvRevenda">R$ 0,00</strong><small>Produtos de revenda.</small></div>
+            <div class="category-card"><span>Status</span><strong id="vendasStatusOperacao">Sem dados</strong><small id="vendasDiagnostico">Faça o fechamento de vendas do mês.</small></div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <table class="data-table">
+            <thead><tr><th>Competência</th><th>Itens vendidos</th><th>CMV Teórico</th><th>CMV Real</th><th>Perdas</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody id="vendasMensaisTable"><tr><td colspan="7" class="text-muted">Nenhum fechamento de vendas registrado ainda.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <aside class="drawer drawer-wide" id="drawerVendasMes">
+    <div class="drawer-header"><h2 id="drawerVendasTitle">Novo Fechamento de Vendas</h2><button type="button" class="drawer-close" onclick="closeDrawer()">×</button></div>
+    <div class="drawer-body">
+      <form id="formVendasMes">
+        <input type="hidden" id="vendasId">
+        <div class="form-section">
+          <h3 class="form-section-title">Dados do fechamento</h3>
+          <div class="form-grid">
+            <div class="form-field"><label for="vendasCompetencia">Competência *</label><input type="month" id="vendasCompetencia" required></div>
+            <div class="form-field"><label for="vendasData">Data do fechamento</label><input type="date" id="vendasData"></div>
+            <div class="form-field"><label for="vendasResponsavel">Responsável</label><input type="text" id="vendasResponsavel" readonly></div>
+            <div class="form-field full"><label for="vendasObservacoes">Observações</label><textarea id="vendasObservacoes" placeholder="Ex.: evento especial, produto sem ficha, mês atípico..."></textarea></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <h3 class="form-section-title">Receitas cadastradas</h3>
+          <p class="text-muted form-helper-text">O sistema carrega automaticamente as fichas técnicas. Preencha apenas a quantidade vendida no mês.</p>
+          <div id="vendasReceitasContainer"></div>
+        </div>
+        <div class="form-section">
+          <div class="category-summary">
+            <div class="category-card"><span>Pratos vendidos</span><strong id="previewPratosVendidos">0</strong></div>
+            <div class="category-card"><span>Revendas vendidas</span><strong id="previewRevendasVendidas">0</strong></div>
+            <div class="category-card"><span>CMV Teórico Total</span><strong id="previewCmvTeoricoTotal">R$ 0,00</strong></div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="drawer-footer"><button type="button" class="btn btn-outline" onclick="closeDrawer()">Cancelar</button><button type="submit" form="formVendasMes" class="btn btn-primary">Salvar Fechamento</button></div>
+  </aside>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/session.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/banners.js"></script>
+  <script src="../js/cmv-real-mensal.js"></script>
+</body>
+</html>

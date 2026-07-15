@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+  <title>Vendas / Produção | BALU Food</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/banners.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/estoque.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+
+        <div class="page-header">
+          <div>
+            <h1>Vendas / Produção</h1>
+            <p>Registre vendas ou produções manuais para baixar insumos e embalagens a partir das fichas técnicas.</p>
+          </div>
+
+          <div class="page-actions">
+            <button type="button" class="btn btn-outline" id="btnExportarVendasProducao">
+              <i data-lucide="download"></i>
+              Exportar
+            </button>
+
+            <button type="button" class="btn btn-primary" id="btnNovaVendaProducao">
+              <i data-lucide="plus"></i>
+              Nova Venda/Produção
+            </button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card green">
+            <span>Vendas/Produções do mês</span>
+            <strong id="vendasMesTotal">0</strong>
+            <small>Registros confirmados no período atual.</small>
+          </div>
+
+          <div class="kpi-card purple">
+            <span>Quantidade total</span>
+            <strong id="vendasQuantidadeTotal">0</strong>
+            <small>Total produzido ou vendido no mês.</small>
+          </div>
+
+          <div class="kpi-card orange">
+            <span>Estoque baixado estimado</span>
+            <strong id="vendasEstoqueBaixado">R$ 0,00</strong>
+            <small>Custo estimado dos itens consumidos.</small>
+          </div>
+
+          <div class="kpi-card red">
+            <span>Último registro</span>
+            <strong id="vendasUltimoRegistro">Nenhum</strong>
+            <small>Registro mais recente salvo.</small>
+          </div>
+        </div>
+
+        <div class="finance-panel">
+          <div class="finance-panel-header">
+            <div>
+              <h2>Baixa automática por ficha técnica</h2>
+              <p>Registros confirmados reduzem o estoque atual de insumos e embalagens cadastrados.</p>
+            </div>
+
+            <span class="badge purple">Estoque operacional</span>
+          </div>
+
+          <div class="calc-flow">
+            <div class="calc-flow-card">
+              <span>Ficha técnica</span>
+              <strong>Composição</strong>
+            </div>
+
+            <div class="calc-flow-symbol">×</div>
+
+            <div class="calc-flow-card">
+              <span>Quantidade</span>
+              <strong>Vendida/produzida</strong>
+            </div>
+
+            <div class="calc-flow-symbol">=</div>
+
+            <div class="calc-flow-card result">
+              <span>Baixa de estoque</span>
+              <strong>Insumos + embalagens</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="cadastro-toolbar">
+            <div class="cadastro-toolbar-left">
+              <input
+                type="search"
+                id="searchVendasProducao"
+                class="cadastro-search"
+                placeholder="Buscar por produto, canal, status ou observação..."
+              >
+            </div>
+
+            <div class="cadastro-toolbar-right">
+              <select id="filterCanalVendaProducao" class="cadastro-filter">
+                <option value="">Todos os canais</option>
+                <option value="Balcão">Balcão</option>
+                <option value="Delivery">Delivery</option>
+                <option value="Ifood">Ifood</option>
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="Outro">Outro</option>
+              </select>
+
+              <select id="filterStatusVendaProducao" class="cadastro-filter">
+                <option value="">Todos os status</option>
+                <option value="Confirmada">Confirmada</option>
+                <option value="Pendente">Pendente</option>
+                <option value="Cancelada">Cancelada</option>
+              </select>
+            </div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Canal</th>
+                <th>Custo estimado</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+
+            <tbody id="vendasProducaoTable">
+              <tr>
+                <td colspan="7" class="text-muted">Nenhuma venda ou produção registrada ainda.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <aside class="drawer drawer-wide" id="drawerVendaProducao">
+    <div class="drawer-header">
+      <div>
+        <h2 id="drawerVendaProducaoTitle">Nova Venda/Produção</h2>
+        <p>Selecione uma ficha técnica para calcular a baixa prevista no estoque.</p>
+      </div>
+
+      <button type="button" class="drawer-close" onclick="closeDrawer()">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <form id="formVendaProducao">
+        <input type="hidden" id="vendaProducaoId">
+
+        <div class="form-section">
+          <h3 class="form-section-title">Dados do registro</h3>
+
+          <div class="form-grid">
+            <div class="form-field full">
+              <label for="vendaFicha">Produto / ficha técnica *</label>
+              <select id="vendaFicha" required>
+                <option value="">Selecione uma ficha técnica</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="vendaData">Data *</label>
+              <input type="date" id="vendaData" required>
+            </div>
+
+            <div class="form-field">
+              <label for="vendaQuantidade">Quantidade *</label>
+              <input type="number" id="vendaQuantidade" min="0.01" step="0.01" placeholder="0" required>
+            </div>
+
+            <div class="form-field">
+              <label for="vendaCanal">Canal</label>
+              <select id="vendaCanal">
+                <option value="Balcão">Balcão</option>
+                <option value="Delivery">Delivery</option>
+                <option value="Ifood">Ifood</option>
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="vendaStatus">Status *</label>
+              <select id="vendaStatus" required>
+                <option value="Confirmada">Confirmada</option>
+                <option value="Pendente">Pendente</option>
+                <option value="Cancelada">Cancelada</option>
+              </select>
+            </div>
+
+            <div class="form-field full">
+              <label for="vendaObservacoes">Observações</label>
+              <textarea id="vendaObservacoes" placeholder="Ex: produção para balcão, lote do dia, venda avulsa..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section-title">Resumo da ficha selecionada</h3>
+
+          <div class="category-summary">
+            <div class="category-card">
+              <span>Produto</span>
+              <strong id="vendaFichaNomePreview">Selecione</strong>
+              <small id="vendaFichaCategoriaPreview">Nenhuma ficha selecionada.</small>
+            </div>
+
+            <div class="category-card">
+              <span>Rendimento</span>
+              <strong id="vendaFichaRendimentoPreview">0</strong>
+              <small id="vendaFichaUnidadePreview">Porções ou unidades.</small>
+            </div>
+
+            <div class="category-card">
+              <span>Custo por unidade</span>
+              <strong id="vendaFichaCustoPreview">R$ 0,00</strong>
+              <small>Base da ficha técnica.</small>
+            </div>
+
+            <div class="category-card">
+              <span>Preço sugerido</span>
+              <strong id="vendaFichaPrecoPreview">R$ 0,00</strong>
+              <small>Preço salvo na ficha técnica.</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section-title">Prévia da baixa de estoque</h3>
+
+          <div class="table-card" style="box-shadow: none; padding: 0; border-radius: 16px;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Código</th>
+                  <th>Estoque atual</th>
+                  <th>Baixa</th>
+                  <th>Estoque após</th>
+                  <th>Custo</th>
+                </tr>
+              </thead>
+
+              <tbody id="vendaPreviewTable">
+                <tr>
+                  <td colspan="6" class="text-muted">Selecione uma ficha técnica para visualizar a baixa.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="drawer-footer">
+      <button type="button" class="btn btn-outline" onclick="closeDrawer()">Cancelar</button>
+
+      <button type="submit" form="formVendaProducao" class="btn btn-primary">
+        <i data-lucide="save"></i>
+        Salvar Registro
+      </button>
+    </div>
+  </aside>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script src="../js/app.js"></script>
+  <script src="../js/session.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/banners.js"></script>
+  <script src="../js/vendas-producao.js"></script>
+</body>
+</html>

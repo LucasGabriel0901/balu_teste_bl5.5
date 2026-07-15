@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+
+  <title>Fichas Técnicas Simplificadas | BALU Food</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/banners.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/estoque.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+  <link rel="stylesheet" href="../css/fichas-tecnicas.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+
+    <div class="page-header">
+      <div>
+        <h1>Fichas Técnicas Simplificadas</h1>
+        <p>Monte o custo teórico do prato usando insumos, embalagens, mão de obra, custos operacionais e margem desejada.</p>
+      </div>
+
+      <div class="page-actions">
+        <button type="button" class="btn btn-outline" id="btnExportarFichas">
+          <i data-lucide="download"></i>
+          Exportar
+        </button>
+
+        <button type="button" class="btn btn-primary" id="btnNovaFicha">
+          <i data-lucide="plus"></i>
+          Nova Ficha
+        </button>
+      </div>
+    </div>
+
+    <div class="page-note strategy-note">
+      <div>
+        <strong>Ficha simplificada:</strong>
+        <span>o objetivo é calcular o custo de cada prato, o CMV teórico e o preço sugerido sem transformar o BALU em um sistema complexo de produção ou PDV.</span>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card green">
+        <span>Total de receitas</span>
+        <strong id="fichasTotalReceitas">0</strong>
+        <small>Receitas e bases cadastradas.</small>
+      </div>
+
+      <div class="kpi-card purple">
+        <span>Custo médio por porção</span>
+        <strong id="fichasCustoMedioPorcao">R$ 0,00</strong>
+        <small>Média das fichas ativas.</small>
+      </div>
+
+      <div class="kpi-card orange">
+        <span>Custo médio por 100g</span>
+        <strong id="fichasCustoMedio100g">R$ 0,00</strong>
+        <small>Base para comparação de receitas.</small>
+      </div>
+
+      <div class="kpi-card red">
+        <span>Receitas em atenção</span>
+        <strong id="fichasReceitasAtencao">0</strong>
+        <small>Margem baixa ou prejuízo.</small>
+      </div>
+    </div>
+
+    <div class="finance-panel">
+      <div class="finance-panel-header">
+        <div>
+          <h2>Resumo econômico da ficha</h2>
+          <p>Veja rapidamente custo total, porção, CMV, margem e lucro unitário da última receita calculada.</p>
+        </div>
+
+        <span class="badge purple">CMV teórico</span>
+      </div>
+
+      <div class="category-summary">
+        <div class="category-card">
+          <span>Custo total</span>
+          <strong id="resumoFichaCustoTotal">R$ 0,00</strong>
+          <small>Insumos + embalagens + mão de obra + outros custos.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Custo por porção</span>
+          <strong id="resumoFichaCustoPorcao">R$ 0,00</strong>
+          <small>Custo total dividido pelo rendimento.</small>
+        </div>
+
+        <div class="category-card">
+          <span>CMV teórico</span>
+          <strong id="resumoFichaCmvAtual">0,00%</strong>
+          <small>Custo teórico da porção dividido pelo preço de venda.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Margem de contribuição</span>
+          <strong id="resumoFichaMargem">0,00%</strong>
+          <small>Percentual de lucro sobre o preço de venda.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Lucro unitário</span>
+          <strong id="resumoFichaLucroUnitario">R$ 0,00</strong>
+          <small>Preço de venda menos custo por porção.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Preço sugerido</span>
+          <strong id="resumoFichaPrecoSugerido">R$ 0,00</strong>
+          <small>Baseado no CMV alvo ou na margem desejada.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="cadastro-toolbar">
+        <div class="cadastro-toolbar-left">
+          <input
+            type="search"
+            id="searchFichas"
+            class="cadastro-search"
+            placeholder="Buscar por receita, categoria, centro de resultado..."
+          >
+        </div>
+
+        <div class="cadastro-toolbar-right">
+          <select id="filterTipoFicha" class="cadastro-filter">
+            <option value="">Todos os tipos</option>
+            <option value="Receita">Receitas</option>
+            <option value="Base">Bases</option>
+            <option value="Produto">Produtos</option>
+          </select>
+
+          <select id="filterCategoriaFicha" class="cadastro-filter">
+            <option value="">Todas as categorias</option>
+            <option value="Pratos">Pratos</option>
+            <option value="Marmitas">Marmitas</option>
+            <option value="Lanches">Lanches</option>
+            <option value="Molhos">Molhos</option>
+            <option value="Sobremesas">Sobremesas</option>
+            <option value="Bebidas">Bebidas</option>
+            <option value="Bases">Bases</option>
+            <option value="Outros">Outros</option>
+          </select>
+
+          <select id="filterStatusFicha" class="cadastro-filter">
+            <option value="">Todos os status</option>
+            <option value="Ativa">Ativa</option>
+            <option value="Revisão">Revisão</option>
+            <option value="Inativa">Inativa</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Receita</th>
+            <th>Tipo</th>
+            <th>Categoria</th>
+            <th>Porção</th>
+            <th>Custo por porção</th>
+            <th>Custo por 100g</th>
+            <th>Preço venda</th>
+            <th>CMV teórico</th>
+            <th>Margem</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody id="fichasTecnicasTable">
+          <tr>
+            <td colspan="11" class="text-muted">
+              Nenhuma ficha técnica cadastrada ainda.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+</main>
+
+  </div>
+
+  <aside class="drawer drawer-wide" id="drawerFichaTecnica">
+    <div class="drawer-header">
+      <div>
+        <h2 id="drawerFichaTitle">Nova Ficha Técnica</h2>
+        <p id="drawerFichaSubtitle">Cadastre composição, resultado, utilização, preparo e precificação.</p>
+      </div>
+
+  <button type="button" class="drawer-close" onclick="closeDrawer()">
+    &times;
+  </button>
+</div>
+
+<div class="drawer-body">
+  <form id="formFichaTecnica">
+
+    <input type="hidden" id="fichaId">
+
+    <div class="form-section">
+      <div class="ficha-top-area">
+        <div class="image-upload-field ficha-image-field">
+          <input type="file" id="fichaImagemInput" accept="image/*" hidden>
+
+          <label for="fichaImagemInput" class="image-upload-box ficha-image-box">
+            <img id="fichaImagemPreview" class="image-preview" alt="Imagem da receita">
+
+            <div class="image-placeholder" id="fichaImagemPlaceholder">
+              <i data-lucide="image-plus"></i>
+              <strong>Imagem da receita</strong>
+              <small>Opcional</small>
+            </div>
+          </label>
+        </div>
+
+        <div class="ficha-main-fields">
+          <div class="form-grid">
+            <div class="form-field full">
+              <label for="fichaNome">Nome da receita *</label>
+              <input type="text" id="fichaNome" placeholder="Ex: Shawarma Frango" required>
+            </div>
+
+            <div class="form-field">
+              <label for="fichaTipo">Tipo *</label>
+              <select id="fichaTipo" required>
+                <option value="Receita">Receita</option>
+                <option value="Base">Base</option>
+                <option value="Produto">Produto</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="fichaStatus">Status *</label>
+              <select id="fichaStatus" required>
+                <option value="Ativa">Ativa</option>
+                <option value="Revisão">Revisão</option>
+                <option value="Inativa">Inativa</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="fichaCategoria">Categoria *</label>
+              <select id="fichaCategoria" required>
+                <option value="">Selecione</option>
+                <option value="Pratos">Pratos</option>
+                <option value="Marmitas">Marmitas</option>
+                <option value="Lanches">Lanches</option>
+                <option value="Molhos">Molhos</option>
+                <option value="Sobremesas">Sobremesas</option>
+                <option value="Bebidas">Bebidas</option>
+                <option value="Bases">Bases</option>
+                <option value="Outros">Outros</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="fichaSubcategoria">Subcategoria</label>
+              <input type="text" id="fichaSubcategoria" placeholder="Ex: Árabe, Executivo, Fitness">
+            </div>
+
+            <div class="form-field">
+              <label for="fichaCentroResultado">Centro de resultado</label>
+              <input type="text" id="fichaCentroResultado" placeholder="Ex: Delivery, Balcão, Eventos">
+            </div>
+
+            <div class="form-field">
+              <label for="fichaResponsavel">Responsável</label>
+              <input type="text" id="fichaResponsavel" placeholder="Ex: Lucas Gabriel">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner-tabs ficha-tabs">
+      <button type="button" class="inner-tab active" data-ficha-tab="composicao">
+        Composição
+      </button>
+
+      <button type="button" class="inner-tab" data-ficha-tab="resultado">
+        Resultado
+      </button>
+
+      <button type="button" class="inner-tab" data-ficha-tab="utilizacao">
+        Utilização
+      </button>
+
+      <button type="button" class="inner-tab" data-ficha-tab="preparo">
+        Modo de Preparo
+      </button>
+
+      <button type="button" class="inner-tab" data-ficha-tab="precificacao">
+        Precificação
+      </button>
+    </div>
+
+    <div class="ficha-tab-panel active" id="tabFichaComposicao">
+      <div class="form-section">
+        <h3 class="form-section-title">Rendimento e porção</h3>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="fichaPesoBruto">Peso bruto dos insumos</label>
+            <input type="text" id="fichaPesoBruto" inputmode="decimal" placeholder="Ex: 1200">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaPesoLiquido">Peso líquido final</label>
+            <input type="text" id="fichaPesoLiquido" inputmode="decimal" placeholder="Ex: 1100">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaUnidadePeso">Unidade de peso</label>
+            <select id="fichaUnidadePeso">
+              <option value="g">Gramas</option>
+              <option value="kg">Kg</option>
+              <option value="ml">ML</option>
+              <option value="litro">Litro</option>
+              <option value="unidade">Unidade</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="fichaPorcaoPadrao">Porção padrão para venda *</label>
+            <input type="text" id="fichaPorcaoPadrao" inputmode="decimal" placeholder="Ex: 300" required>
+          </div>
+
+          <div class="form-field">
+            <label for="fichaRendimento">Rendimento da receita *</label>
+            <input type="text" id="fichaRendimento" inputmode="decimal" placeholder="Ex: 4" required>
+          </div>
+
+          <div class="form-field">
+            <label for="fichaUnidadeRendimento">Unidade do rendimento</label>
+            <select id="fichaUnidadeRendimento">
+              <option value="porções">Porções</option>
+              <option value="unidades">Unidades</option>
+              <option value="marmitas">Marmitas</option>
+              <option value="kg">Kg</option>
+              <option value="litros">Litros</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-row-title">
+          <h3 class="form-section-title">Composição da receita</h3>
+
+          <div class="section-actions-inline">
+            <button type="button" class="btn btn-outline btn-small" id="btnAdicionarItemFicha">
+              <i data-lucide="plus"></i>
+              Adicionar item
+            </button>
+          </div>
+        </div>
+
+        <div class="ficha-item-type-tabs">
+          <button type="button" class="ficha-type-chip active" data-ficha-item-type="Insumo">
+            Insumos
+          </button>
+
+          <button type="button" class="ficha-type-chip" data-ficha-item-type="Base">
+            Bases
+          </button>
+
+          <button type="button" class="ficha-type-chip" data-ficha-item-type="Embalagem">
+            Embalagens
+          </button>
+
+          <button type="button" class="ficha-type-chip" data-ficha-item-type="Mão de obra">
+            Mão de Obra
+          </button>
+
+          <button type="button" class="ficha-type-chip" data-ficha-item-type="Outro">
+            Outros
+          </button>
+        </div>
+
+        <div id="fichaItensContainer" class="inventory-items">
+          <div class="inventory-item ficha-composition-item">
+            <div class="inventory-item-grid ficha-composition-grid">
+              <div class="form-field">
+                <label>Tipo</label>
+                <select class="fichaItemTipo">
+                  <option value="Insumo">Insumo</option>
+                  <option value="Base">Base</option>
+                  <option value="Embalagem">Embalagem</option>
+                  <option value="Mão de obra">Mão de obra</option>
+                  <option value="Outro">Outro</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label>Item</label>
+                <input type="text" class="fichaItemNome" placeholder="Ex: Frango, arroz, embalagem...">
+              </div>
+
+              <div class="form-field">
+                <label>Quantidade</label>
+                <input type="text" class="fichaItemQuantidade" inputmode="decimal" placeholder="0">
+              </div>
+
+              <div class="form-field">
+                <label>Unidade</label>
+                <select class="fichaItemUnidade">
+                  <option value="g">g</option>
+                  <option value="kg">kg</option>
+                  <option value="ml">ml</option>
+                  <option value="litro">litro</option>
+                  <option value="un">un</option>
+                  <option value="min">min</option>
+                  <option value="pacote">pacote</option>
+                  <option value="caixa">caixa</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label>Custo unitário</label>
+                <input type="text" class="fichaItemCustoUnitario" inputmode="decimal" placeholder="0,00">
+              </div>
+
+              <div class="form-field">
+                <label>Custo total</label>
+                <input type="text" class="fichaItemTotal calculated-field" readonly value="R$ 0,00">
+              </div>
+
+              <button type="button" class="btn btn-outline btn-small fichaItemRemove">
+                Remover
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ficha-tab-panel" id="tabFichaResultado">
+      <div class="form-section">
+        <h3 class="form-section-title">Resumo econômico</h3>
+
+        <div class="calculated-box">
+          <div class="calculated-grid">
+            <div class="calculated-item">
+              <span>Custo dos insumos e bases</span>
+              <strong id="fichaResultadoInsumos">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Embalagens</span>
+              <strong id="fichaResultadoEmbalagens">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Mão de obra</span>
+              <strong id="fichaResultadoMaoObra">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Outros custos</span>
+              <strong id="fichaResultadoOutros">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Perdas</span>
+              <strong id="fichaResultadoPerdas">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Custo total da receita</span>
+              <strong id="fichaResultadoCustoTotal">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Custo por porção</span>
+              <strong id="fichaResultadoCustoPorcao">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Custo por 100g</span>
+              <strong id="fichaResultadoCusto100g">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Rendimento de produção</span>
+              <strong id="fichaResultadoRendimentoProducao">0,00%</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Quantidade final</span>
+              <strong id="fichaResultadoQuantidadeFinal">0</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="form-section-title">Rendimento e perdas</h3>
+
+        <div class="category-summary">
+          <div class="category-card">
+            <span>Peso bruto</span>
+            <strong id="fichaResultadoPesoBruto">0 g</strong>
+            <small>Total informado antes das perdas.</small>
+          </div>
+
+          <div class="category-card">
+            <span>Peso líquido</span>
+            <strong id="fichaResultadoPesoLiquido">0 g</strong>
+            <small>Resultado final aproveitável.</small>
+          </div>
+
+          <div class="category-card">
+            <span>Perda total</span>
+            <strong id="fichaResultadoPerdaPeso">0 g</strong>
+            <small>Diferença entre bruto e líquido.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ficha-tab-panel" id="tabFichaUtilizacao">
+      <div class="form-section">
+        <h3 class="form-section-title">Utilização da receita</h3>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="fichaUsadaEmCardapios">Utilizada em cardápios</label>
+            <input type="text" id="fichaUsadaEmCardapios" inputmode="numeric" placeholder="Ex: 3">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaFrequenciaMensal">Frequência mensal estimada</label>
+            <input type="text" id="fichaFrequenciaMensal" inputmode="decimal" placeholder="Ex: 60">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaConsumoMensal">Consumo mensal estimado</label>
+            <input type="text" id="fichaConsumoMensal" inputmode="decimal" placeholder="Ex: 5800">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaImpactoMensal">Impacto mensal estimado</label>
+            <input type="text" id="fichaImpactoMensal" inputmode="decimal" placeholder="Calculado ou manual">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="form-section-title">Resumo de utilização</h3>
+
+        <div class="calculated-box">
+          <div class="calculated-grid">
+            <div class="calculated-item">
+              <span>Receitas que utilizam</span>
+              <strong id="fichaUtilizacaoCardapiosPreview">0</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Consumo médio mensal</span>
+              <strong id="fichaUtilizacaoConsumoPreview">0</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Impacto no custo mensal</span>
+              <strong id="fichaUtilizacaoImpactoPreview">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Participação estimada</span>
+              <strong id="fichaUtilizacaoParticipacaoPreview">0,00%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ficha-tab-panel" id="tabFichaPreparo">
+      <div class="form-section">
+        <h3 class="form-section-title">Modo de preparo</h3>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="fichaTempoPreparo">Tempo de preparo</label>
+            <input type="text" id="fichaTempoPreparo" placeholder="Ex: 40 minutos">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaValidade">Validade</label>
+            <input type="text" id="fichaValidade" placeholder="Ex: 3 dias refrigerado">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaArmazenamento">Armazenamento</label>
+            <input type="text" id="fichaArmazenamento" placeholder="Ex: Refrigerado 2ºC a 5ºC">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaUnidadeProducao">Unidade de produção</label>
+            <input type="text" id="fichaUnidadeProducao" placeholder="Ex: gramas, unidades, porções">
+          </div>
+
+          <div class="form-field full">
+            <label for="fichaModoPreparo">Etapas do preparo</label>
+            <textarea id="fichaModoPreparo" placeholder="Descreva o processo de preparo, montagem e finalização..."></textarea>
+          </div>
+
+          <div class="form-field full">
+            <label for="fichaObservacoes">Observações internas</label>
+            <textarea id="fichaObservacoes" placeholder="Ex: fornecedor ideal, substituições, cuidados, variação de custo..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ficha-tab-panel" id="tabFichaPrecificacao">
+      <div class="form-section">
+        <h3 class="form-section-title">Defina o preço de venda</h3>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="fichaPrecoVenda">Preço de venda praticado *</label>
+            <input type="text" id="fichaPrecoVenda" inputmode="decimal" placeholder="Ex: 28,90" required>
+          </div>
+
+          <div class="form-field">
+            <label for="fichaCmvAlvo">CMV alvo (%)</label>
+            <input type="text" id="fichaCmvAlvo" inputmode="decimal" placeholder="Ex: 30">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaMargemDesejada">Margem desejada (%)</label>
+            <input type="text" id="fichaMargemDesejada" inputmode="decimal" placeholder="Ex: 30">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaCustosOperacionaisPercent">Custos fixos/variáveis (%)</label>
+            <input type="text" id="fichaCustosOperacionaisPercent" inputmode="decimal" placeholder="Ex: 12">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaMaoObraPercentual">Mão de obra (%)</label>
+            <input type="text" id="fichaMaoObraPercentual" inputmode="decimal" placeholder="Ex: 18">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaMarkupDesejado">Markup desejado</label>
+            <input type="text" id="fichaMarkupDesejado" inputmode="decimal" placeholder="Ex: 3">
+          </div>
+
+          <div class="form-field">
+            <label for="fichaCanalPrincipal">Canal principal</label>
+            <select id="fichaCanalPrincipal">
+              <option value="Delivery Próprio">Delivery Próprio</option>
+              <option value="Balcão / Loja Física">Balcão / Loja Física</option>
+              <option value="iFood">iFood</option>
+              <option value="Uber Eats">Uber Eats</option>
+              <option value="Eventos">Eventos</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="form-section-title">Resultado da precificação</h3>
+
+        <div class="calculated-box">
+          <div class="calculated-grid">
+            <div class="calculated-item">
+              <span>Preço sugerido por CMV</span>
+              <strong id="fichaPrecoSugeridoCmvPreview">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Preço sugerido por markup</span>
+              <strong id="fichaPrecoSugeridoMarkupPreview">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Preço sugerido por margem</span>
+              <strong id="fichaPrecoSugeridoMargemPreview">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Adicional operacional</span>
+              <strong id="fichaAdicionalOperacionalPreview">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>CMV teórico</span>
+              <strong id="fichaCmvAtualPreview">0,00%</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Margem de contribuição</span>
+              <strong id="fichaMargemContribuicaoPreview">0,00%</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Lucro unitário</span>
+              <strong id="fichaLucroUnitarioPreview">R$ 0,00</strong>
+            </div>
+
+            <div class="calculated-item">
+              <span>Markup aplicado</span>
+              <strong id="fichaMarkupAplicadoPreview">0,00x</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-row-title">
+          <h3 class="form-section-title">Preços por canal de venda</h3>
+
+          <button type="button" class="btn btn-outline btn-small" id="btnAdicionarCanalFicha">
+            <i data-lucide="plus"></i>
+            Adicionar canal
+          </button>
+        </div>
+
+        <div id="fichaCanaisContainer" class="inventory-items">
+          <div class="inventory-item ficha-canal-item">
+            <div class="inventory-item-grid ficha-canal-grid">
+              <div class="form-field">
+                <label>Canal</label>
+                <input type="text" class="fichaCanalNome" value="Delivery Próprio">
+              </div>
+
+              <div class="form-field">
+                <label>Preço</label>
+                <input type="text" class="fichaCanalPreco" inputmode="decimal" placeholder="0,00">
+              </div>
+
+              <div class="form-field">
+                <label>Taxa (%)</label>
+                <input type="text" class="fichaCanalTaxa" inputmode="decimal" placeholder="0">
+              </div>
+
+              <div class="form-field">
+                <label>CMV</label>
+                <input type="text" class="fichaCanalCmv calculated-field" readonly value="0,00%">
+              </div>
+
+              <div class="form-field">
+                <label>Margem</label>
+                <input type="text" class="fichaCanalMargem calculated-field" readonly value="0,00%">
+              </div>
+
+              <div class="form-field">
+                <label>Lucro</label>
+                <input type="text" class="fichaCanalLucro calculated-field" readonly value="R$ 0,00">
+              </div>
+
+              <button type="button" class="btn btn-outline btn-small fichaCanalRemove">
+                Remover
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<div class="drawer-footer">
+  <button type="button" class="btn btn-outline danger-soft" id="btnExcluirFichaAtual">
+    <i data-lucide="trash-2"></i>
+    Excluir Receita
+  </button>
+
+  <div class="drawer-footer-actions">
+    <button type="button" class="btn btn-outline" onclick="closeDrawer()">
+      Cancelar
+    </button>
+
+    <button type="submit" form="formFichaTecnica" class="btn btn-primary">
+      <i data-lucide="save"></i>
+      Salvar Receita
+    </button>
+  </div>
+</div>
+
+  </aside>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script src="../js/app.js"></script>
+
+  <script src="../js/session.js"></script>
+
+  <script src="../js/layout.js"></script>
+
+  <script src="../js/auth-guard.js"></script>
+
+  <script src="../js/banners.js"></script>
+
+
+  <script src="../js/fichas-tecnicas.js"></script>
+
+</body>
+</html>
+

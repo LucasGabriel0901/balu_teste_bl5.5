@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BALU Food | Abrindo sistema</title>
+</head>
+
+<body>
+  <p>Abrindo o BALU Food...</p>
+
+  <script>
+    var sessaoTeste = {
+      token: "token_demo_balu",
+      acesso_liberado: true,
+      motivo_bloqueio: null,
+      usuario: {
+        id: 1,
+        nome: "Lucas Gabriel",
+        email: "lucas@balufood.com.br",
+        perfil: "Administrador",
+        status: "Ativo"
+      },
+      empresa: {
+        id: 1,
+        nome_fantasia: "Empresa Teste BALU",
+        slug: "empresa-teste-balu",
+        status: "Ativo",
+        status_pagamento: "Em dia"
+      },
+      plano: {
+        id: 2,
+        nome: "Pro",
+        valor: 350
+      },
+      assinatura: {
+        status: "Ativa",
+        data_vencimento: "2026-12-31"
+      },
+      login_em: new Date().toISOString()
+    };
+
+    localStorage.setItem("balu_auth_session", JSON.stringify(sessaoTeste));
+
+    window.location.href = "./pages/dashboard.html";
+  </script>
+
+</body>
+</html>
+ 

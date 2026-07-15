@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+  <title>Produção | BALU Food</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/banners.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+        <div class="page-header">
+          <div>
+            <h1>Produção</h1>
+            <p>Planeje produções futuras sem baixar estoque. A baixa continua na aba Vendas / Produção.</p>
+          </div>
+
+          <div class="page-actions">
+            <button type="button" class="btn btn-primary" id="btnNovaProducao">
+              <i data-lucide="plus"></i>
+              Nova Produção
+            </button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card green">
+            <span>Produções planejadas</span>
+            <strong id="prodPlanejadas">0</strong>
+            <small>Agenda futura de produção.</small>
+          </div>
+
+          <div class="kpi-card purple">
+            <span>Produções concluídas</span>
+            <strong id="prodConcluidas">0</strong>
+            <small>Planejamentos finalizados.</small>
+          </div>
+
+          <div class="kpi-card orange">
+            <span>Produtos em preparo</span>
+            <strong id="prodEmPreparo">0</strong>
+            <small>Status em produção.</small>
+          </div>
+
+          <div class="kpi-card red">
+            <span>Próxima produção</span>
+            <strong id="prodProxima">Nenhuma</strong>
+            <small>Próxima data planejada.</small>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Produto</th>
+                <th>Quantidade planejada</th>
+                <th>Status</th>
+                <th>Observações</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+
+            <tbody id="producaoTable">
+              <tr>
+                <td colspan="6" class="text-muted">Nenhuma produção planejada ainda.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <aside class="drawer" id="drawerProducao">
+    <div class="drawer-header">
+      <h2 id="drawerProducaoTitle">Nova Produção</h2>
+      <button type="button" class="drawer-close" onclick="closeDrawer()">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <form id="formProducao">
+        <input type="hidden" id="producaoId">
+
+        <div class="form-section">
+          <h3 class="form-section-title">Planejamento</h3>
+
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="producaoData">Data *</label>
+              <input type="date" id="producaoData" required>
+            </div>
+
+            <div class="form-field">
+              <label for="producaoProduto">Produto *</label>
+              <input type="text" id="producaoProduto" required>
+            </div>
+
+            <div class="form-field">
+              <label for="producaoQuantidade">Quantidade planejada</label>
+              <input type="number" id="producaoQuantidade" min="0" step="0.01">
+            </div>
+
+            <div class="form-field">
+              <label for="producaoStatus">Status</label>
+              <select id="producaoStatus">
+                <option value="Planejada">Planejada</option>
+                <option value="Em produção">Em produção</option>
+                <option value="Concluída">Concluída</option>
+                <option value="Cancelada">Cancelada</option>
+              </select>
+            </div>
+
+            <div class="form-field full">
+              <label for="producaoObservacoes">Observações</label>
+              <textarea id="producaoObservacoes"></textarea>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="drawer-footer">
+      <button type="button" class="btn btn-outline" onclick="closeDrawer()">Cancelar</button>
+      <button type="submit" form="formProducao" class="btn btn-primary">Salvar Produção</button>
+    </div>
+  </aside>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/session.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/banners.js"></script>
+  <script src="../js/producao.js"></script>
+</body>
+</html>

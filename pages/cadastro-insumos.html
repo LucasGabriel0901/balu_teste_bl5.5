@@ -1,0 +1,679 @@
+﻿<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+
+  <title>Cadastro de Insumos | BALU Food</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/insumos.css">
+  <link rel="stylesheet" href="../css/banners.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+
+
+    <div class="page-header">
+      <div>
+        <h1>Cadastro de Insumos</h1>
+        <p>Cadastre cada insumo uma única vez. O BALU calcula conversões, fator de correção e custos para fichas técnicas e precificação.</p>
+      </div>
+
+      <div class="page-actions">
+        <button type="button" class="btn btn-outline btnModeloCsvInsumos">
+          <i data-lucide="file-down"></i>
+          Baixar modelo CSV
+        </button>
+
+        <button type="button" class="btn btn-outline" id="btnAbrirImportacaoInsumos" onclick="openDrawer('drawerImportarInsumos')">
+          <i data-lucide="upload"></i>
+          Importar CSV
+        </button>
+
+        <button type="button" class="btn btn-outline" id="btnExportarInsumos">
+          <i data-lucide="download"></i>
+          Exportar dados
+        </button>
+
+        <button type="button" class="btn btn-primary" id="btnNovoInsumo">
+          <i data-lucide="plus"></i>
+          Novo Insumo
+        </button>
+      </div>
+    </div>
+
+    <div class="cadastro-summary insumos-summary-grid">
+      <div class="cadastro-summary-card">
+        <span>Total de insumos</span>
+        <strong id="totalInsumos">0</strong>
+      </div>
+
+      <div class="cadastro-summary-card">
+        <span>Estoque em valor</span>
+        <strong id="valorEstoqueInsumos">R$ 0,00</strong>
+      </div>
+
+      <div class="cadastro-summary-card insumos-stock-card" id="cardInsumosEstoqueBaixo">
+        <span>Insumos com estoque baixo</span>
+        <strong id="insumosEstoqueBaixo">0</strong>
+        <small id="textoInsumosEstoqueBaixo" class="summary-alert-hint">Nenhum item em atenção</small>
+      </div>
+
+      <div class="cadastro-summary-card">
+        <span>Preço médio geral</span>
+        <strong id="precoMedioGeral">R$ 0,00</strong>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="cadastro-toolbar">
+        <div class="cadastro-toolbar-left">
+          <input type="search" id="searchInsumos" class="cadastro-search" placeholder="Buscar por nome, código, grupo, lote ou localização...">
+        </div>
+
+        <div class="cadastro-toolbar-right">
+          <select id="filterGrupoInsumo" class="cadastro-filter">
+            <option value="">Todos os grupos</option>
+            <option value="Carnes">Carnes</option>
+            <option value="Hortifruti">Hortifruti</option>
+            <option value="Secos">Secos</option>
+            <option value="Laticínios">Laticínios</option>
+            <option value="Bebidas">Bebidas</option>
+            <option value="Outros">Outros</option>
+          </select>
+
+          <select id="filterStatusInsumo" class="cadastro-filter">
+            <option value="">Todos os status</option>
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+            <option value="Crítico">Crítico</option>
+            <option value="Atenção">Atenção</option>
+            <option value="Estoque baixo">Estoque baixo</option>
+            <option value="Estoque ok">Estoque ok</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Insumo</th>
+            <th>Código</th>
+            <th>Grupo</th>
+            <th>Unidade</th>
+            <th>Preço médio</th>
+            <th>Preço/Kg</th>
+            <th>Estoque</th>
+            <th>Localização</th>
+            <th>Valor estoque</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody id="insumosTable">
+          <tr>
+            <td colspan="11" class="text-muted">Nenhum insumo cadastrado ainda.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+</main>
+
+  </div>
+
+  <aside class="drawer" id="drawerInsumo">
+    <div class="drawer-header">
+      <div>
+        <h2 id="drawerInsumoTitle">Novo Insumo</h2>
+        <p>Preencha os dados do ingrediente, estoque e armazenamento.</p>
+      </div>
+
+
+  <button type="button" class="drawer-close" onclick="closeDrawer()">&times;</button>
+</div>
+
+<div class="drawer-body">
+  <form id="formInsumo">
+    <input type="hidden" id="insumoId">
+
+    <div class="form-section">
+      <h3 class="form-section-title">Foto do insumo</h3>
+
+      <div class="image-upload-field">
+        <input type="file" id="insumoImagemInput" accept="image/*" hidden>
+
+        <label for="insumoImagemInput" class="image-upload-box">
+          <img id="insumoImagemPreview" class="image-preview" alt="Preview do insumo">
+
+          <div class="image-placeholder" id="insumoImagemPlaceholder">
+            <i data-lucide="image-plus"></i>
+            <strong>Adicionar foto</strong>
+            <small>Opcional - PNG, JPG ou WEBP</small>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="form-section-title">Dados básicos</h3>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="insumoNome">Nome do insumo *</label>
+          <input type="text" id="insumoNome" placeholder="Ex: Farinha de trigo" required>
+        </div>
+
+        <div class="form-field">
+          <label for="insumoCodigo">Código</label>
+          <input type="text" id="insumoCodigo" placeholder="Ex: INS-0001">
+        </div>
+
+        <div class="form-field">
+          <label for="insumoGrupo">Grupo *</label>
+          <select id="insumoGrupo" required>
+            <option value="">Selecione</option>
+            <option value="Carnes">Carnes</option>
+            <option value="Hortifruti">Hortifruti</option>
+            <option value="Secos">Secos</option>
+            <option value="Laticínios">Laticínios</option>
+            <option value="Bebidas">Bebidas</option>
+            <option value="Outros">Outros</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="insumoUnidadeCompra">Unidade de compra *</label>
+          <select id="insumoUnidadeCompra" required>
+            <option value="">Selecione</option>
+            <option value="kg">Kg</option>
+            <option value="g">Gramas</option>
+            <option value="litro">Litro</option>
+            <option value="ml">ML</option>
+            <option value="unidade">Unidade</option>
+            <option value="pacote">Pacote</option>
+            <option value="caixa">Caixa</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="insumoUnidadeConsumo">Unidade de consumo *</label>
+          <select id="insumoUnidadeConsumo" required>
+            <option value="">Selecione</option>
+            <option value="kg">Kg</option>
+            <option value="g">Gramas</option>
+            <option value="litro">Litro</option>
+            <option value="ml">ML</option>
+            <option value="unidade">Unidade</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="quantidadePorEmbalagem">Quantidade por caixa/pacote</label>
+          <input type="number" id="quantidadePorEmbalagem" min="0" step="0.01" placeholder="Ex: 30">
+        </div>
+
+        <div class="form-field full">
+          <label for="insumoDescricao">Descrição</label>
+          <textarea id="insumoDescricao" placeholder="Observações sobre o insumo"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="form-section-title">Peso, rendimento e fator de correção</h3>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="pesoEmbalagemGramas">Peso da embalagem em gramas *</label>
+          <input type="number" id="pesoEmbalagemGramas" min="0" step="0.01" placeholder="Ex: 5000">
+          <small class="text-muted">Ex: pacote de 5kg = 5000g.</small>
+        </div>
+
+        <div class="form-field">
+          <label for="pesoBruto">Peso bruto em gramas</label>
+          <input type="number" id="pesoBruto" min="0" step="0.01" placeholder="Ex: 1000">
+        </div>
+
+        <div class="form-field">
+          <label for="pesoLiquido">Peso líquido em gramas</label>
+          <input type="number" id="pesoLiquido" min="0" step="0.01" placeholder="Ex: 850">
+        </div>
+
+        <div class="form-field">
+          <label for="fatorCorrecao">Fator de correção</label>
+          <input type="text" id="fatorCorrecao" class="calculated-field" readonly value="Não calculado">
+        </div>
+
+        <div class="form-field">
+          <label for="perdaPercentual">Perda %</label>
+          <input type="text" id="perdaPercentual" class="calculated-field" readonly value="0,00%">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="form-section-title">Fornecedores e preços</h3>
+
+      <div class="supplier-list">
+        <div class="supplier-card">
+          <div class="supplier-card-header">
+            <strong>Fornecedor 1</strong>
+          </div>
+
+          <div class="supplier-grid">
+            <div class="form-field">
+              <label for="fornecedor1">Nome do fornecedor</label>
+              <input type="text" id="fornecedor1" placeholder="Ex: Atacado Exemplo">
+            </div>
+
+            <div class="form-field">
+              <label for="precoFornecedor1">Preço da embalagem</label>
+              <input type="number" id="precoFornecedor1" min="0" step="0.01" placeholder="0,00">
+            </div>
+          </div>
+        </div>
+
+        <div class="supplier-card">
+          <div class="supplier-card-header">
+            <strong>Fornecedor 2</strong>
+          </div>
+
+          <div class="supplier-grid">
+            <div class="form-field">
+              <label for="fornecedor2">Nome do fornecedor</label>
+              <input type="text" id="fornecedor2" placeholder="Opcional">
+            </div>
+
+            <div class="form-field">
+              <label for="precoFornecedor2">Preço da embalagem</label>
+              <input type="number" id="precoFornecedor2" min="0" step="0.01" placeholder="0,00">
+            </div>
+          </div>
+        </div>
+
+        <div class="supplier-card">
+          <div class="supplier-card-header">
+            <strong>Fornecedor 3</strong>
+          </div>
+
+          <div class="supplier-grid">
+            <div class="form-field">
+              <label for="fornecedor3">Nome do fornecedor</label>
+              <input type="text" id="fornecedor3" placeholder="Opcional">
+            </div>
+
+            <div class="form-field">
+              <label for="precoFornecedor3">Preço da embalagem</label>
+              <input type="number" id="precoFornecedor3" min="0" step="0.01" placeholder="0,00">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calculated-box">
+        <h4 class="calculated-box-title">Cálculos automáticos</h4>
+
+        <div class="calculated-grid">
+          <div class="calculated-item">
+            <span>Preço médio da embalagem</span>
+            <strong id="precoMedioPreview">R$ 0,00</strong>
+          </div>
+
+          <div class="calculated-item">
+            <span>Preço médio por kg</span>
+            <strong id="precoMedioKgPreview">R$ 0,00</strong>
+          </div>
+
+          <div class="calculated-item">
+            <span>Custo por unidade</span>
+            <strong id="custoUnitarioPreview">R$ 0,00</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="form-section-title">Estoque</h3>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="estoqueAtual">Estoque atual em gramas/unidades</label>
+          <input type="number" id="estoqueAtual" min="0" step="0.01" placeholder="0">
+        </div>
+
+        <div class="form-field">
+          <label for="estoqueMinimo">Estoque mínimo em gramas/unidades</label>
+          <input type="number" id="estoqueMinimo" min="0" step="0.01" placeholder="0">
+        </div>
+
+        <div class="form-field">
+          <label for="estoqueIdeal">Estoque ideal em gramas/unidades</label>
+          <input type="number" id="estoqueIdeal" min="0" step="0.01" placeholder="0">
+        </div>
+
+        <div class="form-field">
+          <label for="insumoStatus">Status do cadastro</label>
+          <select id="insumoStatus">
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="calculated-box">
+        <h4 class="calculated-box-title">Resumo de estoque</h4>
+
+        <div class="calculated-grid">
+          <div class="calculated-item">
+            <span>Valor em estoque</span>
+            <strong id="valorEstoquePreview">R$ 0,00</strong>
+          </div>
+
+          <div class="calculated-item">
+            <span>Status de estoque</span>
+            <strong id="statusEstoquePreview">Não calculado</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="form-section-title">Armazenamento e localização</h3>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="insumoTipoArmazenamento">Tipo de armazenamento</label>
+          <select id="insumoTipoArmazenamento">
+            <option value="">Selecione</option>
+            <option value="Seco">Seco</option>
+            <option value="Refrigerado">Refrigerado</option>
+            <option value="Congelado">Congelado</option>
+            <option value="Geladeira">Geladeira</option>
+            <option value="Freezer">Freezer</option>
+            <option value="Câmara fria">Câmara fria</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="insumoLocalArmazenamento">Local de armazenamento</label>
+          <input type="text" id="insumoLocalArmazenamento" placeholder="Ex: Estoque principal">
+        </div>
+
+        <div class="form-field">
+          <label for="insumoPosicaoArmazenamento">Posição exata</label>
+          <input type="text" id="insumoPosicaoArmazenamento" placeholder="Ex: Prateleira 3, Geladeira 5">
+        </div>
+
+        <div class="form-field">
+          <label for="insumoValidade">Validade</label>
+          <input type="date" id="insumoValidade">
+        </div>
+
+        <div class="form-field">
+          <label for="insumoLote">Lote</label>
+          <input type="text" id="insumoLote" placeholder="Ex: LOTE-2026-001">
+        </div>
+
+        <div class="form-field">
+          <label for="insumoMarcaPreferida">Marca preferida</label>
+          <input type="text" id="insumoMarcaPreferida" placeholder="Ex: Marca, distribuidor ou padrão">
+        </div>
+
+        <div class="form-field full">
+          <label for="insumoObservacaoArmazenamento">Observação de armazenamento</label>
+          <textarea id="insumoObservacaoArmazenamento" placeholder="Ex: manter fechado, validade curta após aberto..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="form-section-title">Informações adicionais</h3>
+
+      <div class="form-grid">
+        <div class="form-field full">
+          <label for="insumoObservacoes">Observações internas</label>
+          <textarea id="insumoObservacoes" placeholder="Ex: marcas preferidas, restrições, observações gerais..."></textarea>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="drawer-footer">
+  <button type="button" class="btn btn-outline" onclick="closeDrawer()">Cancelar</button>
+  <button type="submit" form="formInsumo" class="btn btn-primary">Salvar Insumo</button>
+</div>
+
+
+  </aside>
+
+  <aside class="drawer drawer-wide" id="drawerDetalheInsumo">
+    <div class="drawer-header">
+      <div>
+        <h2 id="detalheInsumoTitulo">Resumo do Insumo</h2>
+        <p id="detalheInsumoSubtitulo">Detalhes do item selecionado.</p>
+      </div>
+
+
+  <button type="button" class="drawer-close" onclick="closeDrawer()">&times;</button>
+</div>
+
+<div class="drawer-body">
+  <div id="detalheInsumoConteudo">
+    <p class="text-muted">Selecione um insumo na tabela para visualizar os detalhes.</p>
+  </div>
+</div>
+
+<div class="drawer-footer">
+  <button type="button" class="btn btn-outline" onclick="closeDrawer()">Fechar</button>
+  <button type="button" class="btn btn-primary" id="btnEditarInsumoDetalhe">Editar Insumo</button>
+</div>
+
+
+  </aside>
+
+  <aside class="drawer drawer-wide" id="drawerImportarInsumos">
+    <div class="drawer-header">
+      <div>
+        <h2>Importar Insumos por CSV</h2>
+        <p>Confira, edite e valide os dados antes de importar para o sistema.</p>
+      </div>
+
+
+  <button type="button" class="drawer-close" onclick="closeDrawer()">&times;</button>
+</div>
+
+<div class="drawer-body">
+  <div class="form-section">
+    <h3 class="form-section-title">Modelo oficial do BALU</h3>
+
+    <div class="import-help-card">
+      <strong>Importante</strong>
+      O sistema aceita apenas o modelo CSV oficial do BALU. Depois de carregar o arquivo, você poderá editar cada linha antes de salvar no sistema.
+    </div>
+
+    <div class="import-actions">
+      <button type="button" class="btn btn-outline btnModeloCsvInsumos">
+        <i data-lucide="file-down"></i>
+        Baixar modelo CSV
+      </button>
+
+      <button type="button" class="btn btn-outline" id="btnLimparImportacaoInsumos">
+        <i data-lucide="trash-2"></i>
+        Limpar prévia
+      </button>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3 class="form-section-title">Enviar modelo preenchido</h3>
+
+    <div class="import-file-box">
+      <div class="form-field full">
+        <label for="importInsumosCsvFile">Arquivo CSV preenchido</label>
+        <input type="file" id="importInsumosCsvFile" accept=".csv,text/csv">
+        <small class="text-muted">Use o arquivo gerado pelo botão "Baixar modelo CSV".</small>
+      </div>
+    </div>
+
+    <div id="importInsumosStatus" class="import-status-box warning">
+      Nenhum arquivo carregado.
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3 class="form-section-title">Prévia editável antes de importar</h3>
+
+    <div class="import-help-card">
+      Confira os dados abaixo. Cada linha pode ser editada antes da importação. Linhas com erro precisam ser corrigidas para entrar no sistema.
+    </div>
+
+    <div class="import-preview-wrap">
+      <table class="data-table import-edit-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Código</th>
+            <th>Nome *</th>
+            <th>Grupo *</th>
+            <th>Unidade</th>
+            <th>Peso g</th>
+            <th>Fornecedor 1</th>
+            <th>Preço 1</th>
+            <th>Fornecedor 2</th>
+            <th>Preço 2</th>
+            <th>Fornecedor 3</th>
+            <th>Preço 3</th>
+            <th>Estoque</th>
+            <th>Mínimo</th>
+            <th>Ideal</th>
+            <th>Validade</th>
+            <th>Status linha</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+
+        <tbody id="importInsumosPreviewTable">
+          <tr>
+            <td colspan="18" class="text-muted">Carregue o modelo CSV preenchido para visualizar a prévia.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="drawer-footer">
+  <button type="button" class="btn btn-outline" onclick="closeDrawer()">Cancelar</button>
+  <button type="button" class="btn btn-primary" id="btnConfirmarImportacaoInsumos">Importar Insumos</button>
+</div>
+
+
+  </aside>
+
+  <aside class="drawer drawer-wide" id="drawerAlertaEstoqueInsumos">
+    <div class="drawer-header">
+      <div>
+        <h2>Insumos para repor</h2>
+        <p>Lista de insumos em atenção ou em situação crítica.</p>
+      </div>
+
+
+  <button type="button" class="drawer-close" onclick="closeDrawer()">&times;</button>
+</div>
+
+<div class="drawer-body">
+  <div class="alert-stock-topbar">
+    <div>
+      <h3>Reposição de insumos</h3>
+      <p>Use esta visão para organizar compras e evitar falta de ingredientes na operação.</p>
+    </div>
+
+    <button type="button" class="btn btn-outline" id="btnExportarAlertaInsumos">
+      <i data-lucide="download"></i>
+      Exportar CSV
+    </button>
+  </div>
+
+  <div class="alert-stock-summary">
+    <div>
+      <span>Total em alerta</span>
+      <strong id="alertaInsumosTotal">0</strong>
+    </div>
+
+    <div>
+      <span>Críticos</span>
+      <strong id="alertaInsumosCriticos">0</strong>
+    </div>
+
+    <div>
+      <span>Em atenção</span>
+      <strong id="alertaInsumosAtencao">0</strong>
+    </div>
+  </div>
+
+  <div class="alert-stock-table-wrap">
+    <table class="data-table alert-stock-table">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Insumo</th>
+          <th>Grupo</th>
+          <th>Unidade</th>
+          <th>Estoque atual</th>
+          <th>Mínimo</th>
+          <th>Ideal</th>
+          <th>Falta repor</th>
+          <th>Preço/kg</th>
+          <th>Valor estimado</th>
+          <th>Status</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+
+      <tbody id="alertaInsumosTable">
+        <tr>
+          <td colspan="12" class="text-muted">Nenhum insumo em alerta.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="drawer-footer">
+  <button type="button" class="btn btn-outline" onclick="closeDrawer()">Fechar</button>
+</div>
+
+
+  </aside>
+
+  <!-- Exemplo Insumos -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/session.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/banners.js"></script>
+  <script src="../js/cadastro-insumos.js"></script>
+
+  </body>
+  </html>
+

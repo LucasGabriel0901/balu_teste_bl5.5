@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+  <title>Precificação | BALU Food</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/banners.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+</head>
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+        <div class="page-header">
+          <div>
+            <h1>Precificação</h1>
+            <p>Transforme o custo técnico da ficha em preço de venda por canal, usando mão de obra, custos operacionais, taxas, impostos e margem desejada.</p>
+          </div>
+          <div class="page-actions">
+            <button type="button" class="btn btn-outline" id="btnCanaisPrecificacao"><i data-lucide="settings"></i> Configurar Canais</button>
+            <button type="button" class="btn btn-primary" id="btnSalvarPrecificacao"><i data-lucide="save"></i> Salvar Precificação</button>
+          </div>
+        </div>
+
+        <div class="page-note strategy-note"><div><strong>Mínimo preenchimento:</strong><span>selecione a ficha técnica e informe a margem desejada. O restante vem dos módulos de Faturamento, Mão de Obra, Custos e Canais.</span></div></div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card green"><span>Mão de obra média</span><strong id="precMaoObraPct">0,00%</strong><small>Puxado automaticamente.</small></div>
+          <div class="kpi-card purple"><span>Custos operacionais</span><strong id="precCustosPct">0,00%</strong><small>Custos ÷ faturamento médio.</small></div>
+          <div class="kpi-card orange"><span>Canais ativos</span><strong id="precCanaisAtivos">0</strong><small>Configurações comerciais.</small></div>
+          <div class="kpi-card red"><span>Histórico salvo</span><strong id="precHistoricoQtd">0</strong><small>Precificações registradas.</small></div>
+        </div>
+
+        <div class="finance-panel">
+          <div class="finance-panel-header"><div><h2>Precificação da Receita</h2><p>O preço sugerido é calculado para cada canal configurado.</p></div><span class="badge purple">Preço por canal</span></div>
+          <div class="form-grid">
+            <div class="form-field"><label for="precFicha">Ficha técnica *</label><select id="precFicha"><option value="">Selecione uma ficha</option></select></div>
+            <div class="form-field"><label for="precMargem">Margem desejada (%) *</label><input type="number" id="precMargem" min="0" step="0.01" value="25"></div>
+            <div class="form-field"><label for="precCustoManual">Custo manual, se necessário</label><input type="number" id="precCustoManual" min="0" step="0.01" placeholder="Usar só se não houver ficha"></div>
+          </div>
+          <div class="category-summary" style="margin-top:16px;">
+            <div class="category-card"><span>Custo da receita</span><strong id="precCustoReceitaPreview">R$ 0,00</strong></div>
+            <div class="category-card"><span>Margem desejada</span><strong id="precMargemPreview">25,00%</strong></div>
+            <div class="category-card"><span>Faturamento médio base</span><strong id="precFaturamentoMedio">R$ 0,00</strong></div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="cadastro-toolbar"><div><h2>Resultado por canal</h2><p class="text-muted">Informe “meu preço” para ver o impacto real da decisão comercial.</p></div></div>
+          <table class="data-table">
+            <thead><tr><th>Canal</th><th>Custo Receita</th><th>Embalagem</th><th>Preço Sugerido</th><th>Meu Preço</th><th>Receita Líquida</th><th>CMV %</th><th>Lucro Líquido</th><th>Margem</th><th>Status</th></tr></thead>
+            <tbody id="precResultadoTable"><tr><td colspan="10" class="text-muted">Selecione uma ficha técnica para calcular.</td></tr></tbody>
+          </table>
+        </div>
+
+        <div class="table-card">
+          <div class="cadastro-toolbar"><div><h2>Histórico de Precificações</h2><p class="text-muted">Registros salvos por receita, canal, preço e data.</p></div></div>
+          <table class="data-table"><thead><tr><th>Receita</th><th>Canal</th><th>Preço</th><th>Margem</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead><tbody id="precHistoricoTable"><tr><td colspan="7" class="text-muted">Nenhuma precificação salva ainda.</td></tr></tbody></table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <aside class="drawer drawer-wide" id="drawerCanaisPrecificacao">
+    <div class="drawer-header"><h2>Configuração dos Canais de Venda</h2><button type="button" class="drawer-close" onclick="closeDrawer()">×</button></div>
+    <div class="drawer-body">
+      <div class="form-section">
+        <div class="section-row-title"><h3 class="form-section-title">Canais cadastrados</h3><button class="btn btn-outline btn-small" type="button" id="btnAdicionarCanalPrec"><i data-lucide="plus"></i> Novo Canal</button></div>
+        <p class="text-muted form-helper-text">Cadastre uma vez as taxas e impostos. Todas as receitas usam essas configurações automaticamente.</p>
+        <div class="simple-entry-table" id="precCanaisContainer"></div>
+      </div>
+    </div>
+    <div class="drawer-footer"><button class="btn btn-outline" type="button" onclick="closeDrawer()">Cancelar</button><button class="btn btn-primary" type="button" id="btnSalvarCanaisPrec">Salvar Canais</button></div>
+  </aside>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/session.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/banners.js"></script>
+  <script src="../js/precificacao.js"></script>
+</body>
+</html>

@@ -1,0 +1,663 @@
+/* =====================================================
+BALU FOOD - COMPRAS REALIZADAS
+Estilo específico da tela de compras
+===================================================== */
+
+/* ==============================
+KPIs da tela
+================================= */
+
+.kpi-grid {
+display: grid;
+grid-template-columns: repeat(4, minmax(180px, 1fr));
+gap: 16px;
+margin-bottom: 22px;
+}
+
+.kpi-card {
+position: relative;
+min-height: 118px;
+padding: 18px;
+border-radius: 22px;
+background: #ffffff;
+border: 1px solid #e2e8f0;
+box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
+overflow: hidden;
+}
+
+.kpi-card::before {
+content: "";
+position: absolute;
+width: 82px;
+height: 82px;
+top: -32px;
+right: -28px;
+border-radius: 999px;
+background: rgba(108, 43, 217, 0.12);
+}
+
+.kpi-card::after {
+content: "";
+position: absolute;
+left: 0;
+top: 18px;
+bottom: 18px;
+width: 4px;
+border-radius: 0 999px 999px 0;
+background: #6c2bd9;
+}
+
+.kpi-card.green::before {
+background: rgba(22, 163, 74, 0.12);
+}
+
+.kpi-card.green::after {
+background: #16a34a;
+}
+
+.kpi-card.purple::before {
+background: rgba(108, 43, 217, 0.12);
+}
+
+.kpi-card.purple::after {
+background: #6c2bd9;
+}
+
+.kpi-card.orange::before {
+background: rgba(249, 115, 22, 0.14);
+}
+
+.kpi-card.orange::after {
+background: #f97316;
+}
+
+.kpi-card.red::before {
+background: rgba(220, 38, 38, 0.12);
+}
+
+.kpi-card.red::after {
+background: #dc2626;
+}
+
+.kpi-card span {
+position: relative;
+z-index: 1;
+display: block;
+color: #64748b;
+font-size: 12px;
+font-weight: 800;
+line-height: 1.25;
+}
+
+.kpi-card strong {
+position: relative;
+z-index: 1;
+display: block;
+margin-top: 9px;
+color: #0f172a;
+font-size: 26px;
+line-height: 1;
+font-weight: 900;
+letter-spacing: -0.6px;
+}
+
+.kpi-card small {
+position: relative;
+z-index: 1;
+display: block;
+margin-top: 9px;
+color: #64748b;
+font-size: 11px;
+line-height: 1.35;
+font-weight: 600;
+}
+
+/* ==============================
+Painel explicativo de CMV
+================================= */
+
+.finance-panel {
+margin-bottom: 22px;
+padding: 20px;
+border-radius: 24px;
+background:
+radial-gradient(circle at top right, rgba(108, 43, 217, 0.10), transparent 32%),
+#ffffff;
+border: 1px solid #e2e8f0;
+box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
+}
+
+.finance-panel-header {
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+gap: 16px;
+margin-bottom: 18px;
+}
+
+.finance-panel-header h2 {
+margin: 0;
+color: #0f172a;
+font-size: 19px;
+line-height: 1.2;
+font-weight: 900;
+letter-spacing: -0.4px;
+}
+
+.finance-panel-header p {
+margin: 6px 0 0;
+color: #64748b;
+font-size: 13px;
+line-height: 1.45;
+font-weight: 600;
+}
+
+.badge {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+min-height: 28px;
+padding: 7px 11px;
+border-radius: 999px;
+font-size: 11px;
+line-height: 1;
+font-weight: 900;
+white-space: nowrap;
+}
+
+.badge.purple {
+background: rgba(108, 43, 217, 0.12);
+color: #5b21b6;
+}
+
+.badge.success,
+.badge.Confirmada {
+background: rgba(22, 163, 74, 0.12);
+color: #15803d;
+}
+
+.badge.warning,
+.badge.Pendente {
+background: rgba(249, 115, 22, 0.14);
+color: #c2410c;
+}
+
+.badge.danger,
+.badge.Cancelada {
+background: rgba(220, 38, 38, 0.12);
+color: #b91c1c;
+}
+
+/* ==============================
+Fluxo do CMV
+================================= */
+
+.calc-flow {
+display: grid;
+grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+gap: 12px;
+align-items: center;
+}
+
+.calc-flow-card {
+min-height: 88px;
+padding: 16px;
+border-radius: 18px;
+background: #f8fafc;
+border: 1px solid #e2e8f0;
+text-align: center;
+}
+
+.calc-flow-card span {
+display: block;
+color: #64748b;
+font-size: 11px;
+line-height: 1.2;
+font-weight: 900;
+text-transform: uppercase;
+letter-spacing: 0.03em;
+}
+
+.calc-flow-card strong {
+display: block;
+margin-top: 8px;
+color: #0f172a;
+font-size: 18px;
+line-height: 1.1;
+font-weight: 900;
+}
+
+.calc-flow-card.result {
+background:
+radial-gradient(circle at top right, rgba(255, 255, 255, 0.22), transparent 34%),
+linear-gradient(135deg, #6c2bd9, #8b5cf6);
+border-color: transparent;
+}
+
+.calc-flow-card.result span,
+.calc-flow-card.result strong {
+color: #ffffff;
+}
+
+.calc-flow-symbol {
+width: 34px;
+height: 34px;
+border-radius: 999px;
+background: rgba(108, 43, 217, 0.10);
+color: #6c2bd9;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 900;
+}
+
+/* ==============================
+Tabela de compras
+================================= */
+
+.table-card {
+width: 100%;
+max-width: 100%;
+}
+
+.table-card .data-table {
+min-width: 1180px;
+}
+
+#comprasTable td {
+vertical-align: middle;
+}
+
+#comprasTable strong {
+color: #0f172a;
+font-weight: 900;
+}
+
+.table-actions {
+display: flex;
+align-items: center;
+gap: 7px;
+}
+
+.btn-icon {
+width: 34px;
+height: 34px;
+border: 1px solid #e2e8f0;
+border-radius: 12px;
+background: #ffffff;
+color: #334155;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: 0.18s ease;
+}
+
+.btn-icon svg {
+width: 15px;
+height: 15px;
+}
+
+.btn-icon:hover {
+background: #f1f5f9;
+border-color: #cbd5e1;
+color: #0f172a;
+}
+
+.btn-icon.danger {
+color: #dc2626;
+}
+
+.btn-icon.danger:hover {
+background: rgba(220, 38, 38, 0.08);
+border-color: rgba(220, 38, 38, 0.24);
+}
+
+/* ==============================
+Drawer de compra
+================================= */
+
+#drawerCompra {
+width: min(860px, 96vw);
+}
+
+#drawerCompra .drawer-header {
+background:
+radial-gradient(circle at top right, rgba(108, 43, 217, 0.12), transparent 34%),
+#ffffff;
+}
+
+#drawerCompra .drawer-header h2 {
+color: #0f172a;
+font-size: 22px;
+font-weight: 900;
+letter-spacing: -0.4px;
+}
+
+#drawerCompra .drawer-body {
+background: #f8fafc;
+}
+
+#drawerCompra .drawer-footer {
+background: #ffffff;
+border-top: 1px solid #e2e8f0;
+}
+
+/* ==============================
+Upload de comprovante
+================================= */
+
+.image-upload-field {
+width: 100%;
+}
+
+.image-upload-box {
+position: relative;
+width: 100%;
+min-height: 190px;
+border: 1.5px dashed #cbd5e1;
+border-radius: 22px;
+background:
+linear-gradient(135deg, rgba(108, 43, 217, 0.05), rgba(249, 115, 22, 0.04)),
+#ffffff;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+overflow: hidden;
+transition: 0.18s ease;
+}
+
+.image-upload-box:hover {
+border-color: #7c3aed;
+background:
+linear-gradient(135deg, rgba(108, 43, 217, 0.08), rgba(249, 115, 22, 0.06)),
+#ffffff;
+}
+
+.image-preview {
+width: 100%;
+height: 100%;
+min-height: 190px;
+object-fit: cover;
+object-position: center;
+display: none;
+}
+
+.image-placeholder {
+padding: 22px;
+text-align: center;
+color: #64748b;
+}
+
+.image-placeholder svg {
+width: 34px;
+height: 34px;
+color: #6c2bd9;
+margin-bottom: 10px;
+}
+
+.image-placeholder strong {
+display: block;
+color: #0f172a;
+font-size: 15px;
+font-weight: 900;
+}
+
+.image-placeholder small {
+display: block;
+margin-top: 6px;
+color: #64748b;
+font-size: 12px;
+line-height: 1.35;
+font-weight: 600;
+}
+
+/* ==============================
+Itens da compra
+================================= */
+
+.inventory-items {
+display: flex;
+flex-direction: column;
+gap: 14px;
+width: 100%;
+}
+
+.inventory-item {
+width: 100%;
+background: #ffffff;
+border: 1px solid #e2e8f0;
+border-radius: 20px;
+padding: 16px;
+box-sizing: border-box;
+overflow: visible;
+box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+}
+
+.inventory-item-grid {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 14px;
+align-items: end;
+width: 100%;
+}
+
+.inventory-item-grid .form-field {
+width: 100%;
+min-width: 0;
+margin: 0;
+box-sizing: border-box;
+}
+
+.inventory-item-grid label {
+display: block;
+width: 100%;
+margin: 0 0 6px;
+color: #64748b;
+font-size: 11px;
+font-weight: 900;
+line-height: 1.2;
+letter-spacing: 0.03em;
+text-transform: uppercase;
+white-space: normal;
+}
+
+.inventory-item-grid input,
+.inventory-item-grid select {
+display: block;
+width: 100%;
+min-width: 0;
+min-height: 44px;
+box-sizing: border-box;
+border: 1px solid #dbe3ef;
+border-radius: 13px;
+background: #ffffff;
+padding: 0 12px;
+color: #0f172a;
+font-size: 14px;
+font-weight: 700;
+outline: none;
+transition: 0.18s ease;
+}
+
+.inventory-item-grid input:focus,
+.inventory-item-grid select:focus {
+border-color: #7c3aed;
+box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+.inventory-item-grid .calculated-field {
+background: #f8fafc;
+color: #0f172a;
+font-weight: 900;
+}
+
+.compraItemRemove {
+width: 100%;
+min-height: 44px;
+grid-column: 1 / -1;
+justify-content: center;
+align-self: end;
+white-space: nowrap;
+}
+
+#btnAdicionarItemCompra {
+margin-top: 14px;
+}
+
+/* Dentro do drawer o layout fica em uma coluna para não quebrar */
+#drawerCompra .inventory-item {
+padding: 16px;
+border-radius: 18px;
+}
+
+#drawerCompra .inventory-item-grid {
+display: grid !important;
+grid-template-columns: 1fr !important;
+gap: 12px !important;
+align-items: stretch !important;
+}
+
+#drawerCompra .inventory-item-grid .form-field {
+grid-column: auto !important;
+width: 100% !important;
+min-width: 0 !important;
+}
+
+#drawerCompra .inventory-item-grid input,
+#drawerCompra .inventory-item-grid select {
+width: 100% !important;
+min-width: 0 !important;
+}
+
+#drawerCompra .compraItemRemove {
+grid-column: auto !important;
+width: 100% !important;
+}
+
+/* ==============================
+Resumo calculado
+================================= */
+
+.calculated-box {
+width: 100%;
+border-radius: 20px;
+background:
+radial-gradient(circle at top right, rgba(108, 43, 217, 0.10), transparent 34%),
+#ffffff;
+border: 1px solid #e2e8f0;
+padding: 16px;
+}
+
+.calculated-grid {
+display: grid;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+gap: 12px;
+}
+
+.calculated-item {
+min-height: 86px;
+padding: 14px;
+border-radius: 16px;
+background: #f8fafc;
+border: 1px solid #e2e8f0;
+}
+
+.calculated-item span {
+display: block;
+color: #64748b;
+font-size: 11px;
+line-height: 1.2;
+font-weight: 900;
+text-transform: uppercase;
+letter-spacing: 0.03em;
+}
+
+.calculated-item strong {
+display: block;
+margin-top: 8px;
+color: #0f172a;
+font-size: 17px;
+line-height: 1.15;
+font-weight: 900;
+}
+
+/* ==============================
+Responsivo
+================================= */
+
+@media (max-width: 1180px) {
+.kpi-grid {
+grid-template-columns: repeat(2, minmax(180px, 1fr));
+}
+
+.calc-flow {
+grid-template-columns: 1fr;
+}
+
+.calc-flow-symbol {
+margin: 0 auto;
+transform: rotate(90deg);
+}
+
+.calculated-grid {
+grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+}
+
+@media (max-width: 900px) {
+.finance-panel-header {
+flex-direction: column;
+}
+
+.inventory-item-grid {
+grid-template-columns: 1fr;
+}
+
+.compraItemRemove {
+grid-column: auto;
+}
+}
+
+@media (max-width: 720px) {
+.kpi-grid,
+.calculated-grid {
+grid-template-columns: 1fr;
+}
+
+.kpi-card {
+min-height: 108px;
+}
+
+.finance-panel {
+padding: 16px;
+border-radius: 20px;
+}
+
+.finance-panel-header h2 {
+font-size: 17px;
+}
+
+.calc-flow-card {
+min-height: 78px;
+}
+
+.image-upload-box,
+.image-preview {
+min-height: 160px;
+}
+
+.inventory-item {
+padding: 14px;
+}
+
+.inventory-item-grid input,
+.inventory-item-grid select {
+min-height: 46px;
+}
+
+#drawerCompra {
+width: 100vw;
+}
+}

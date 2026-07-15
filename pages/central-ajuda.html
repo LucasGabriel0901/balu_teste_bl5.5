@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+  <title>Central de Ajuda | BALU Food</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/banners.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+        <div class="page-header">
+          <div>
+            <h1>Central de Ajuda</h1>
+            <p>Guia rápido para entender os principais fluxos do BALU Food durante a implantação.</p>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card green">
+            <span>Primeiro passo</span>
+            <strong>Insumos</strong>
+            <small>Cadastre ingredientes e custos base.</small>
+          </div>
+
+          <div class="kpi-card purple">
+            <span>Operação</span>
+            <strong>Compras</strong>
+            <small>Confirme compras para alimentar estoque.</small>
+          </div>
+
+          <div class="kpi-card orange">
+            <span>Controle</span>
+            <strong>Inventário</strong>
+            <small>Compare sistema e estoque físico.</small>
+          </div>
+
+          <div class="kpi-card red">
+            <span>Resultado</span>
+            <strong>CMV</strong>
+            <small>Acompanhe custo real e margem.</small>
+          </div>
+        </div>
+
+        <div class="finance-panel">
+          <div class="finance-panel-header">
+            <div>
+              <h2>Perguntas frequentes</h2>
+              <p>Conteúdo inicial para treinamento do cliente. Pode virar base de tutoriais depois.</p>
+            </div>
+
+            <span class="badge purple">Em preparação</span>
+          </div>
+
+          <div class="supplier-list" id="centralAjudaLista">
+            <div class="supplier-card" data-help-card>
+              <div class="supplier-card-header">
+                <strong>Como cadastrar insumos?</strong>
+                <button type="button" class="btn btn-outline btn-small">Ver</button>
+              </div>
+              <p class="text-muted">Informe unidade de consumo, fornecedores, preços, estoque atual e estoque mínimo.</p>
+            </div>
+
+            <div class="supplier-card" data-help-card>
+              <div class="supplier-card-header">
+                <strong>Como cadastrar embalagens?</strong>
+                <button type="button" class="btn btn-outline btn-small">Ver</button>
+              </div>
+              <p class="text-muted">Cadastre pacotes, quantidade por pacote, preço unitário e estoque disponível.</p>
+            </div>
+
+            <div class="supplier-card" data-help-card>
+              <div class="supplier-card-header">
+                <strong>Como registrar compras?</strong>
+                <button type="button" class="btn btn-outline btn-small">Ver</button>
+              </div>
+              <p class="text-muted">Lance compras confirmadas para somar quantidade ao estoque e alimentar o CMV.</p>
+            </div>
+
+            <div class="supplier-card" data-help-card>
+              <div class="supplier-card-header">
+                <strong>Como usar vendas/produção?</strong>
+                <button type="button" class="btn btn-outline btn-small">Ver</button>
+              </div>
+              <p class="text-muted">Use fichas técnicas para registrar vendas ou produção e baixar estoque automaticamente.</p>
+            </div>
+
+            <div class="supplier-card" data-help-card>
+              <div class="supplier-card-header">
+                <strong>Como fazer inventário?</strong>
+                <button type="button" class="btn btn-outline btn-small">Ver</button>
+              </div>
+              <p class="text-muted">Conte o estoque físico e compare com o estoque do sistema para corrigir divergências.</p>
+            </div>
+
+            <div class="supplier-card" data-help-card>
+              <div class="supplier-card-header">
+                <strong>Como calcular CMV?</strong>
+                <button type="button" class="btn btn-outline btn-small">Ver</button>
+              </div>
+              <p class="text-muted">Use estoque inicial + compras confirmadas - estoque final para chegar ao CMV real.</p>
+            </div>
+
+            <div class="supplier-card" data-help-card>
+              <div class="supplier-card-header">
+                <strong>Como criar ficha técnica?</strong>
+                <button type="button" class="btn btn-outline btn-small">Ver</button>
+              </div>
+              <p class="text-muted">Monte composição, rendimento, custo por porção e preço de venda recomendado.</p>
+            </div>
+
+            <div class="supplier-card" data-help-card>
+              <div class="supplier-card-header">
+                <strong>Como interpretar relatórios?</strong>
+                <button type="button" class="btn btn-outline btn-small">Ver</button>
+              </div>
+              <p class="text-muted">Acompanhe compras, estoque, fichas em atenção, vendas/produção e pontos críticos.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="finance-panel help-feedback-panel">
+          <div class="finance-panel-header">
+            <div>
+              <h2>Feedback dos testes</h2>
+              <p>Registre pontos percebidos durante a apresentação ou uso inicial do sistema.</p>
+            </div>
+
+            <span class="badge green">Feedback</span>
+          </div>
+
+          <form id="formFeedbackAjuda" class="form-grid help-feedback-form">
+            <div class="form-field">
+              <label for="feedbackNome">Nome</label>
+              <input type="text" id="feedbackNome" placeholder="Ex: Lucas">
+            </div>
+
+            <div class="form-field">
+              <label for="feedbackEmpresa">Empresa</label>
+              <input type="text" id="feedbackEmpresa" placeholder="Ex: Marmitaria da Ana">
+            </div>
+
+            <div class="form-field">
+              <label for="feedbackTipo">Tipo</label>
+              <select id="feedbackTipo">
+                <option value="Sugestão">Sugestão</option>
+                <option value="Erro/Bug">Erro/Bug</option>
+                <option value="Dúvida">Dúvida</option>
+                <option value="Melhoria">Melhoria</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="feedbackModulo">Módulo relacionado</label>
+              <select id="feedbackModulo">
+                <option value="Geral">Geral</option>
+                <option value="Insumos">Insumos</option>
+                <option value="Embalagens">Embalagens</option>
+                <option value="Compras">Compras</option>
+                <option value="Vendas / Produção">Vendas / Produção</option>
+                <option value="Inventário">Inventário</option>
+                <option value="CMV">CMV</option>
+                <option value="Fichas Técnicas">Fichas Técnicas</option>
+                <option value="Relatórios">Relatórios</option>
+                <option value="Dashboard">Dashboard</option>
+                <option value="Painel de Controle">Painel de Controle</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="feedbackPrioridade">Prioridade</label>
+              <select id="feedbackPrioridade">
+                <option value="Baixa">Baixa</option>
+                <option value="Média" selected>Média</option>
+                <option value="Alta">Alta</option>
+              </select>
+            </div>
+
+            <div class="form-field full">
+              <label for="feedbackMensagem">Mensagem</label>
+              <textarea id="feedbackMensagem" placeholder="Descreva a sugestão, dúvida, bug ou melhoria percebida."></textarea>
+            </div>
+
+            <div class="form-field full">
+              <p class="text-muted">No MVP, os feedbacks ficam salvos localmente. Na versão com banco de dados, serão enviados para o suporte.</p>
+            </div>
+
+            <div class="form-field full">
+              <button type="submit" class="btn btn-primary">
+                <i data-lucide="send"></i>
+                Registrar feedback
+              </button>
+            </div>
+          </form>
+
+          <div class="feedback-list" id="feedbackAjudaLista">
+            <div class="empty-state-alert">
+              <strong>Nenhum feedback registrado ainda.</strong>
+              <p class="text-muted">Os registros salvos neste navegador aparecerão aqui.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/session.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/banners.js"></script>
+  <script src="../js/central-ajuda.js"></script>
+</body>
+</html>

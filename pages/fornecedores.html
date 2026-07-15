@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+  <title>Fornecedores | BALU Food</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/banners.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+        <div class="page-header">
+          <div>
+            <h1>Fornecedores</h1>
+            <p>Organize fornecedores para futuramente vincular às compras de insumos e embalagens.</p>
+          </div>
+
+          <div class="page-actions">
+            <button type="button" class="btn btn-primary" id="btnNovoFornecedor">
+              <i data-lucide="plus"></i>
+              Novo Fornecedor
+            </button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card green">
+            <span>Total de fornecedores</span>
+            <strong id="fornecedoresTotal">0</strong>
+            <small>Cadastros salvos no navegador.</small>
+          </div>
+
+          <div class="kpi-card purple">
+            <span>Fornecedores ativos</span>
+            <strong id="fornecedoresAtivos">0</strong>
+            <small>Prontos para compras futuras.</small>
+          </div>
+
+          <div class="kpi-card orange">
+            <span>Compras vinculadas</span>
+            <strong id="fornecedoresCompras">0</strong>
+            <small>Integração prevista para o módulo de compras.</small>
+          </div>
+
+          <div class="kpi-card red">
+            <span>Último fornecedor</span>
+            <strong id="fornecedoresUltimo">Nenhum</strong>
+            <small>Cadastro mais recente.</small>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>CNPJ/CPF</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+                <th>Categoria</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+
+            <tbody id="fornecedoresTable">
+              <tr>
+                <td colspan="7" class="text-muted">Nenhum fornecedor cadastrado ainda.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <aside class="drawer" id="drawerFornecedor">
+    <div class="drawer-header">
+      <h2 id="drawerFornecedorTitle">Novo Fornecedor</h2>
+      <button type="button" class="drawer-close" onclick="closeDrawer()">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <form id="formFornecedor">
+        <input type="hidden" id="fornecedorId">
+
+        <div class="form-section">
+          <h3 class="form-section-title">Dados do fornecedor</h3>
+
+          <div class="form-grid">
+            <div class="form-field full">
+              <label for="fornecedorNome">Nome *</label>
+              <input type="text" id="fornecedorNome" required>
+            </div>
+
+            <div class="form-field">
+              <label for="fornecedorDocumento">CNPJ/CPF</label>
+              <input type="text" id="fornecedorDocumento">
+            </div>
+
+            <div class="form-field">
+              <label for="fornecedorTelefone">Telefone</label>
+              <input type="text" id="fornecedorTelefone">
+            </div>
+
+            <div class="form-field">
+              <label for="fornecedorEmail">E-mail</label>
+              <input type="email" id="fornecedorEmail">
+            </div>
+
+            <div class="form-field">
+              <label for="fornecedorCategoria">Categoria</label>
+              <select id="fornecedorCategoria">
+                <option value="Insumos">Insumos</option>
+                <option value="Embalagens">Embalagens</option>
+                <option value="Serviços">Serviços</option>
+                <option value="Misto">Misto</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="fornecedorStatus">Status</label>
+              <select id="fornecedorStatus">
+                <option value="Ativo">Ativo</option>
+                <option value="Inativo">Inativo</option>
+                <option value="Em análise">Em análise</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="drawer-footer">
+      <button type="button" class="btn btn-outline" onclick="closeDrawer()">Cancelar</button>
+      <button type="submit" form="formFornecedor" class="btn btn-primary">Salvar Fornecedor</button>
+    </div>
+  </aside>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/session.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/banners.js"></script>
+  <script src="../js/fornecedores.js"></script>
+</body>
+</html>

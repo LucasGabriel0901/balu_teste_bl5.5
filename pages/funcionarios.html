@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+
+  <title>Mão de Obra | BALU Food</title>
+
+  <!-- Fonte -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- CSS Global -->
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+  <link rel="stylesheet" href="../css/banners.css">
+
+</head>
+
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+
+
+    <!-- Cabeçalho da página -->
+    <div class="page-header">
+      <div>
+        <h1>Mão de Obra</h1>
+        <p>Cadastre CLT, freelancers, MEI e pró-labore para calcular o percentual de mão de obra da operação.</p>
+      </div>
+
+      <div class="page-actions">
+        <button type="button" class="btn btn-outline" id="btnExportarFuncionarios">
+          <i data-lucide="download"></i>
+          Exportar
+        </button>
+
+        <button type="button" class="btn btn-primary" id="btnNovoFuncionario" onclick="openDrawer('drawerFuncionario')">
+          <i data-lucide="plus"></i>
+          Novo Registro
+        </button>
+      </div>
+    </div>
+
+    <!-- Cards superiores -->
+    <div class="kpi-grid">
+      <div class="kpi-card green">
+        <span>Faturamento médio mensal</span>
+        <strong id="faturamentoMensalFuncionario">R$ 0,00</strong>
+        <small>Puxado automaticamente do módulo Faturamento.</small>
+      </div>
+
+      <div class="kpi-card purple">
+        <span>Custo total da equipe</span>
+        <strong id="totalClt">R$ 0,00</strong>
+        <small>CLT, freelancers, MEI e pró-labore.</small>
+      </div>
+
+      <div class="kpi-card orange">
+        <span>Participação da mão de obra</span>
+        <strong id="totalFreelancers">0,00%</strong>
+        <small>Custo total / faturamento médio.</small>
+      </div>
+
+      <div class="kpi-card red">
+        <span>Status da estrutura</span>
+        <strong id="totalMaoObra">Não calculado</strong>
+        <small>Leitura gerencial automática.</small>
+      </div>
+    </div>
+
+    <!-- Painel de participação no faturamento -->
+    <div class="finance-panel">
+      <div class="finance-panel-header">
+        <div>
+          <h2>Resumo da estrutura de mão de obra</h2>
+          <p>O BALU calcula automaticamente quanto a equipe representa sobre o faturamento médio.</p>
+        </div>
+
+        <span id="maoObraStatus" class="badge neutral">Não calculado</span>
+      </div>
+
+      <div class="category-summary">
+        <div class="category-card">
+          <span>Pró-labore + MEI</span>
+          <strong id="totalProlaboreMei">R$ 0,00</strong>
+          <small>Categorias separadas na base.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Participação %</span>
+          <strong id="participacaoMaoObra">0,00%</strong>
+          <small>Total de mão de obra / faturamento.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Meta sugerida</span>
+          <strong id="custoMedioHora">25,00%</strong>
+          <small>Referência inicial para controle.</small>
+        </div>
+      </div>
+
+      <div class="labor-progress">
+        <div id="laborProgressFill" class="labor-progress-fill" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Tabela -->
+    <div class="table-card">
+      <div class="cadastro-toolbar">
+        <div class="cadastro-toolbar-left">
+          <input
+            type="search"
+            id="searchFuncionarios"
+            class="cadastro-search"
+            placeholder="Buscar por nome, função, cargo ou departamento..."
+          >
+        </div>
+
+        <div class="cadastro-toolbar-right">
+          <select id="filterTipoFuncionario" class="cadastro-filter">
+            <option value="">Todos os tipos</option>
+            <option value="CLT">CLT</option>
+            <option value="Freelancer">Freelancer</option>
+            <option value="Pró-labore">Pró-labore</option>
+            <option value="MEI">MEI</option>
+          </select>
+
+          <select id="filterStatusFuncionario" class="cadastro-filter">
+            <option value="">Todos os status</option>
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+            <option value="Afastado">Afastado</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Pessoa / Função</th>
+            <th>Tipo</th>
+            <th>Cargo</th>
+            <th>Salário / Valor</th>
+            <th>Encargos</th>
+            <th>Horas/Mês</th>
+            <th>Custo Mensal</th>
+            <th>Custo/Hora</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody id="funcionariosTable">
+          <tr>
+            <td colspan="10" class="text-muted">
+              Nenhum funcionário cadastrado ainda.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+</main>
+
+
+  </div>
+
+  <!-- Drawer de cadastro/edição -->
+
+  <aside class="drawer" id="drawerFuncionario">
+    <div class="drawer-header">
+      <h2 id="drawerFuncionarioTitle">Novo Registro</h2>
+
+
+  <button type="button" class="drawer-close" onclick="closeDrawer()">
+    &times;
+  </button>
+</div>
+
+<div class="drawer-body">
+  <form id="formFuncionario">
+
+    <input type="hidden" id="funcionarioId">
+
+    <!-- Tipo de contratação -->
+    <div class="form-section">
+      <h3 class="form-section-title">Tipo de contratação</h3>
+
+      <div class="employee-type-grid">
+        <button type="button" class="employee-type-option active" data-tipo="CLT">
+          <strong>CLT</strong>
+          <small>Salário + encargos</small>
+        </button>
+
+        <button type="button" class="employee-type-option" data-tipo="Freelancer">
+          <strong>Freelancer</strong>
+          <small>Diária x dias</small>
+        </button>
+
+        <button type="button" class="employee-type-option" data-tipo="Pró-labore">
+          <strong>Pró-labore</strong>
+          <small>Valor mensal</small>
+        </button>
+
+        <button type="button" class="employee-type-option" data-tipo="MEI">
+          <strong>MEI</strong>
+          <small>Valor mensal</small>
+        </button>
+      </div>
+
+      <input type="hidden" id="tipoContratacao" value="CLT">
+    </div>
+
+    <!-- Foto -->
+    <div class="form-section">
+      <h3 class="form-section-title">Foto ou identificação visual</h3>
+
+      <div class="image-upload-field">
+        <input type="file" id="funcionarioImagemInput" accept="image/*" hidden>
+
+        <label for="funcionarioImagemInput" class="image-upload-box">
+          <img id="funcionarioImagemPreview" class="image-preview" alt="Preview do funcionário">
+
+          <div class="image-placeholder" id="funcionarioImagemPlaceholder">
+            <i data-lucide="image-plus"></i>
+            <strong>Adicionar foto</strong>
+            <small>Opcional - PNG, JPG ou WEBP</small>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Dados básicos -->
+    <div class="form-section">
+      <h3 class="form-section-title">Dados básicos</h3>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="funcionarioNome">Nome / Função *</label>
+          <input type="text" id="funcionarioNome" placeholder="Ex: Churrasqueiro Líder" required>
+        </div>
+
+        <div class="form-field">
+          <label for="funcionarioCargo">Cargo</label>
+          <input type="text" id="funcionarioCargo" placeholder="Ex: Churrasqueiro">
+        </div>
+
+        <div class="form-field">
+          <label for="funcionarioDepartamento">Departamento</label>
+          <select id="funcionarioDepartamento">
+            <option value="Produção">Produção</option>
+            <option value="Atendimento">Atendimento</option>
+            <option value="Administrativo">Administrativo</option>
+            <option value="Entrega">Entrega</option>
+            <option value="Eventos">Eventos</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="funcionarioStatus">Status</label>
+          <select id="funcionarioStatus">
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+            <option value="Afastado">Afastado</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dados CLT -->
+    <div class="form-section tipo-section" id="sectionClt">
+      <h3 class="form-section-title">Cálculo CLT</h3>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="salarioBase">Salário base mensal</label>
+          <input type="number" id="salarioBase" min="0" step="0.01" placeholder="Ex: 2500">
+        </div>
+
+        <div class="form-field">
+          <label for="encargosPercentual">Encargos %</label>
+          <input type="number" id="encargosPercentual" min="0" step="0.01" placeholder="Ex: 32.20">
+        </div>
+
+        <div class="form-field">
+          <label for="horasMensaisClt">Horas mensais</label>
+          <input type="number" id="horasMensaisClt" min="0" step="0.01" placeholder="Ex: 220">
+        </div>
+
+        <div class="form-field">
+          <label for="valorEncargosPreview">Valor dos encargos</label>
+          <input type="text" id="valorEncargosPreview" class="calculated-field" readonly value="R$ 0,00">
+        </div>
+      </div>
+    </div>
+
+    <!-- Dados Freelancer -->
+    <div class="form-section tipo-section" id="sectionFreelancer" style="display: none;">
+      <h3 class="form-section-title">Cálculo Freelancer</h3>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="valorDiaria">Valor da diária</label>
+          <input type="number" id="valorDiaria" min="0" step="0.01" placeholder="Ex: 180">
+        </div>
+
+        <div class="form-field">
+          <label for="diasMes">Quantidade de dias no mês</label>
+          <input type="number" id="diasMes" min="0" step="1" placeholder="Ex: 8">
+        </div>
+
+        <div class="form-field">
+          <label for="horasDiaria">Horas por diária</label>
+          <input type="number" id="horasDiaria" min="0" step="0.01" placeholder="Ex: 8">
+        </div>
+
+        <div class="form-field">
+          <label for="horasTotaisFreelancerPreview">Horas totais</label>
+          <input type="text" id="horasTotaisFreelancerPreview" class="calculated-field" readonly value="0,00h">
+        </div>
+      </div>
+    </div>
+
+    <!-- Dados Pró-labore / MEI -->
+    <div class="form-section tipo-section" id="sectionMensal" style="display: none;">
+      <h3 class="form-section-title">Cálculo Pró-labore / MEI</h3>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="valorMensal">Valor mensal</label>
+          <input type="number" id="valorMensal" min="0" step="0.01" placeholder="Ex: 3500">
+        </div>
+
+        <div class="form-field">
+          <label for="horasMensaisMensal">Horas mensais</label>
+          <input type="number" id="horasMensaisMensal" min="0" step="0.01" placeholder="Ex: 160">
+        </div>
+      </div>
+    </div>
+
+    <!-- Resultado automático -->
+    <div class="form-section">
+      <h3 class="form-section-title">Resumo calculado</h3>
+
+      <div class="calculated-box">
+        <div class="calculated-grid">
+          <div class="calculated-item">
+            <span>Custo mensal</span>
+            <strong id="custoMensalPreview">R$ 0,00</strong>
+          </div>
+
+          <div class="calculated-item">
+            <span>Custo por hora</span>
+            <strong id="custoHoraPreview">R$ 0,00</strong>
+          </div>
+
+          <div class="calculated-item">
+            <span>Horas no mês</span>
+            <strong id="horasMesPreview">0,00h</strong>
+          </div>
+
+          <div class="calculated-item">
+            <span>Tipo selecionado</span>
+            <strong id="tipoSelecionadoPreview">CLT</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Faturamento médio automático -->
+    <div class="form-section">
+      <h3 class="form-section-title">Faturamento médio automático</h3>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="faturamentoMensalInput">Faturamento médio mensal da empresa</label>
+          <input type="number" id="faturamentoMensalInput" min="0" step="0.01" placeholder="Puxado do módulo Faturamento" readonly class="calculated-field">
+          <small class="field-hint">Calculado pela média dos totais mensais registrados. Não é preenchido neste módulo.</small>
+        </div>
+
+        <div class="form-field">
+          <label for="participacaoFuncionarioPreview">Participação individual</label>
+          <input type="text" id="participacaoFuncionarioPreview" class="calculated-field" readonly value="0,00%">
+        </div>
+      </div>
+    </div>
+
+    <!-- Observações -->
+    <div class="form-section">
+      <h3 class="form-section-title">Informações adicionais</h3>
+
+      <div class="form-grid">
+        <div class="form-field full">
+          <label for="funcionarioObservacoes">Observações internas</label>
+          <textarea id="funcionarioObservacoes" placeholder="Ex: disponibilidade, jornada, observações de contrato..."></textarea>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<div class="drawer-footer">
+  <button type="button" class="btn btn-outline" onclick="closeDrawer()">
+    Cancelar
+  </button>
+
+  <button type="submit" form="formFuncionario" class="btn btn-primary">
+    Salvar Funcionário
+  </button>
+</div>
+
+
+  </aside>
+
+  <!-- Ícones -->
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/session.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/banners.js"></script>
+  <script src="../js/funcionarios.js"></script>
+
+</body>
+</html>
+

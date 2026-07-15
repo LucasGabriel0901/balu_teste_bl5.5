@@ -1,0 +1,531 @@
+/* ==============================
+BALU FOOD - ESTOQUE, COMPRAS,
+INVENTÁRIOS E CMV
+================================= */
+
+/* Cards de estoque */
+.stock-card {
+background: var(--balu-white);
+border: 1px solid var(--balu-border-soft);
+border-radius: var(--radius-lg);
+padding: 18px;
+box-shadow: var(--shadow-soft);
+position: relative;
+overflow: hidden;
+}
+
+.stock-card::before {
+content: "";
+position: absolute;
+left: 0;
+top: 0;
+width: 4px;
+height: 100%;
+background: var(--balu-purple);
+}
+
+.stock-card.success::before {
+background: var(--balu-green);
+}
+
+.stock-card.warning::before {
+background: var(--balu-orange);
+}
+
+.stock-card.danger::before {
+background: var(--balu-red);
+}
+
+.stock-card span {
+display: block;
+color: var(--balu-muted);
+font-size: 13px;
+font-weight: 700;
+}
+
+.stock-card strong {
+display: block;
+margin-top: 8px;
+color: var(--balu-text);
+font-size: 24px;
+font-weight: 900;
+}
+
+.stock-card small {
+display: block;
+margin-top: 6px;
+color: var(--balu-muted);
+}
+
+/* Status de estoque */
+.stock-status {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+font-weight: 800;
+font-size: 13px;
+}
+
+.stock-status.normal {
+color: var(--balu-green);
+}
+
+.stock-status.low {
+color: var(--balu-orange);
+}
+
+.stock-status.critical {
+color: var(--balu-red);
+}
+
+/* Valores positivos e negativos */
+.stock-positive {
+color: var(--balu-green);
+font-weight: 900;
+}
+
+.stock-negative {
+color: var(--balu-red);
+font-weight: 900;
+}
+
+.stock-neutral {
+color: var(--balu-muted);
+font-weight: 800;
+}
+
+/* Área de inventário */
+.inventory-builder {
+background: var(--balu-white);
+border: 1px solid var(--balu-border-soft);
+border-radius: var(--radius-lg);
+box-shadow: var(--shadow-soft);
+padding: 18px;
+margin-bottom: 22px;
+}
+
+.inventory-builder-header {
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+gap: 16px;
+margin-bottom: 18px;
+}
+
+.inventory-builder-header h2,
+.inventory-builder-header h3 {
+margin: 0;
+color: var(--balu-text);
+font-size: 18px;
+font-weight: 900;
+}
+
+.inventory-builder-header p {
+margin: 5px 0 0;
+color: var(--balu-muted);
+font-size: 13px;
+}
+
+/* Lista de itens de inventário */
+.inventory-items {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.inventory-item {
+background: #FAFAFA;
+border: 1px solid var(--balu-border-soft);
+border-radius: var(--radius-lg);
+padding: 14px;
+display: grid;
+grid-template-columns: 1.4fr 120px 130px 130px 130px auto;
+gap: 12px;
+align-items: center;
+}
+
+.inventory-item-info {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.inventory-item-info strong {
+display: block;
+color: var(--balu-text);
+font-size: 14px;
+}
+
+.inventory-item-info span {
+display: block;
+margin-top: 3px;
+color: var(--balu-muted);
+font-size: 12px;
+}
+
+.inventory-item label {
+display: block;
+font-size: 11px;
+font-weight: 800;
+color: var(--balu-muted);
+margin-bottom: 5px;
+text-transform: uppercase;
+}
+
+.inventory-item input,
+.inventory-item select {
+width: 100%;
+border: 1px solid var(--balu-border);
+border-radius: var(--radius-md);
+padding: 9px 10px;
+font-size: 13px;
+outline: none;
+background: var(--balu-white);
+}
+
+.inventory-item input:focus,
+.inventory-item select:focus {
+border-color: var(--balu-purple);
+box-shadow: 0 0 0 3px rgba(108, 43, 217, 0.10);
+}
+
+/* Resumo de inventário */
+.inventory-total-box {
+margin-top: 18px;
+background: var(--balu-purple-bg);
+border: 1px solid rgba(108, 43, 217, 0.18);
+border-radius: var(--radius-lg);
+padding: 16px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 16px;
+}
+
+.inventory-total-box span {
+display: block;
+color: var(--balu-purple-text);
+font-size: 13px;
+font-weight: 800;
+}
+
+.inventory-total-box strong {
+display: block;
+margin-top: 4px;
+color: var(--balu-purple);
+font-size: 26px;
+font-weight: 900;
+}
+
+/* Tipos de inventário */
+.inventory-type-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 11px;
+margin-bottom: 16px;
+}
+
+.inventory-type-card {
+border: 1px solid var(--balu-border);
+background: var(--balu-white);
+border-radius: var(--radius-lg);
+padding: 14px;
+cursor: pointer;
+transition: var(--transition-fast);
+}
+
+.inventory-type-card:hover {
+border-color: var(--balu-purple);
+background: var(--balu-purple-bg);
+}
+
+.inventory-type-card.active {
+border-color: var(--balu-purple);
+background: var(--balu-purple);
+color: var(--balu-white);
+}
+
+.inventory-type-card strong {
+display: block;
+font-size: 14px;
+font-weight: 900;
+}
+
+.inventory-type-card small {
+display: block;
+margin-top: 5px;
+font-size: 12px;
+opacity: 0.78;
+line-height: 1.4;
+}
+
+/* Compras */
+.purchase-summary {
+display: grid;
+grid-template-columns: repeat(4, minmax(180px, 1fr));
+gap: 16px;
+margin-bottom: 22px;
+}
+
+.purchase-card {
+background: var(--balu-white);
+border: 1px solid var(--balu-border-soft);
+border-radius: var(--radius-lg);
+padding: 18px;
+box-shadow: var(--shadow-soft);
+}
+
+.purchase-card span {
+color: var(--balu-muted);
+font-size: 13px;
+font-weight: 700;
+}
+
+.purchase-card strong {
+display: block;
+margin-top: 8px;
+color: var(--balu-text);
+font-size: 24px;
+font-weight: 900;
+}
+
+/* CMV */
+.cmv-flow {
+display: grid;
+grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+gap: 12px;
+align-items: center;
+margin-bottom: 22px;
+}
+
+.cmv-flow-card {
+background: var(--balu-white);
+border: 1px solid var(--balu-border-soft);
+border-radius: var(--radius-lg);
+padding: 18px;
+box-shadow: var(--shadow-soft);
+text-align: center;
+}
+
+.cmv-flow-card span {
+display: block;
+color: var(--balu-muted);
+font-size: 12px;
+font-weight: 800;
+text-transform: uppercase;
+}
+
+.cmv-flow-card strong {
+display: block;
+margin-top: 8px;
+color: var(--balu-text);
+font-size: 20px;
+font-weight: 900;
+}
+
+.cmv-flow-card.result {
+background: var(--balu-purple);
+color: var(--balu-white);
+}
+
+.cmv-flow-card.result span,
+.cmv-flow-card.result strong {
+color: var(--balu-white);
+}
+
+.cmv-flow-symbol {
+width: 34px;
+height: 34px;
+border-radius: 50%;
+background: var(--balu-purple-bg);
+color: var(--balu-purple);
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 900;
+}
+
+/* Classificação do CMV */
+.cmv-classification {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+border-radius: 999px;
+padding: 7px 12px;
+font-size: 12px;
+font-weight: 900;
+}
+
+.cmv-classification.excellent {
+background: var(--balu-success-bg);
+color: var(--balu-success-text);
+}
+
+.cmv-classification.expected {
+background: var(--balu-purple-bg);
+color: var(--balu-purple-text);
+}
+
+.cmv-classification.warning {
+background: var(--balu-warning-bg);
+color: var(--balu-warning-text);
+}
+
+.cmv-classification.critical {
+background: var(--balu-danger-bg);
+color: var(--balu-danger-text);
+}
+
+/* Gráfico simples */
+.cmv-chart-card {
+background: var(--balu-white);
+border: 1px solid var(--balu-border-soft);
+border-radius: var(--radius-lg);
+padding: 18px;
+box-shadow: var(--shadow-soft);
+margin-top: 22px;
+}
+
+.simple-bars {
+display: flex;
+align-items: end;
+gap: 12px;
+height: 220px;
+padding: 18px 8px 0;
+border-bottom: 1px solid var(--balu-border);
+}
+
+.simple-bar {
+flex: 1;
+min-width: 38px;
+background: linear-gradient(180deg, var(--balu-purple), #8B5CF6);
+border-radius: 12px 12px 0 0;
+position: relative;
+transition: var(--transition-fast);
+}
+
+.simple-bar:hover {
+filter: brightness(0.95);
+}
+
+.simple-bar span {
+position: absolute;
+bottom: calc(100% + 8px);
+left: 50%;
+transform: translateX(-50%);
+color: var(--balu-text);
+font-size: 12px;
+font-weight: 800;
+white-space: nowrap;
+}
+
+.simple-bar-labels {
+display: flex;
+gap: 12px;
+padding: 10px 8px 0;
+}
+
+.simple-bar-labels span {
+flex: 1;
+text-align: center;
+color: var(--balu-muted);
+font-size: 12px;
+font-weight: 700;
+}
+
+/* Alertas de estoque */
+.stock-alert-list {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.stock-alert {
+background: #FAFAFA;
+border: 1px solid var(--balu-border-soft);
+border-radius: var(--radius-lg);
+padding: 14px;
+display: flex;
+align-items: flex-start;
+gap: 12px;
+}
+
+.stock-alert-icon {
+width: 38px;
+height: 38px;
+border-radius: 12px;
+background: var(--balu-warning-bg);
+color: var(--balu-warning-text);
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+}
+
+.stock-alert.critical .stock-alert-icon {
+background: var(--balu-danger-bg);
+color: var(--balu-danger-text);
+}
+
+.stock-alert-content strong {
+display: block;
+color: var(--balu-text);
+font-size: 14px;
+}
+
+.stock-alert-content span {
+display: block;
+margin-top: 4px;
+color: var(--balu-muted);
+font-size: 13px;
+line-height: 1.4;
+}
+
+/* Responsividade */
+@media (max-width: 1180px) {
+.inventory-item {
+grid-template-columns: 1fr 1fr 1fr;
+}
+
+.cmv-flow {
+grid-template-columns: 1fr;
+}
+
+.cmv-flow-symbol {
+margin: 0 auto;
+transform: rotate(90deg);
+}
+}
+
+@media (max-width: 900px) {
+.purchase-summary {
+grid-template-columns: repeat(2, 1fr);
+}
+
+.inventory-type-grid {
+grid-template-columns: 1fr;
+}
+
+.inventory-total-box {
+flex-direction: column;
+align-items: flex-start;
+}
+}
+
+@media (max-width: 680px) {
+.purchase-summary {
+grid-template-columns: 1fr;
+}
+
+.inventory-item {
+grid-template-columns: 1fr;
+}
+
+.simple-bars {
+overflow-x: auto;
+}
+
+.simple-bar {
+min-width: 50px;
+}
+}

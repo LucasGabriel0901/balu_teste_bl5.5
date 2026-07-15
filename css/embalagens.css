@@ -1,0 +1,399 @@
+/* =====================================================
+   BALU FOOD - EMBALAGENS.CSS
+   Estilos exclusivos da tela Cadastro de Embalagens
+===================================================== */
+
+/* ===============================
+   GRID DOS CARDS
+================================ */
+
+.embalagens-summary-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  align-items: stretch !important;
+  margin-bottom: 22px !important;
+}
+
+.embalagens-summary-grid .cadastro-summary-card {
+  min-height: 92px !important;
+  padding: 18px 20px !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.06) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  overflow: hidden !important;
+}
+
+/* ===============================
+   CARD DE ESTOQUE BAIXO
+================================ */
+
+.embalagens-stock-card {
+  cursor: pointer !important;
+  position: relative !important;
+  transition: 0.18s ease !important;
+}
+
+.embalagens-stock-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12) !important;
+}
+
+.embalagens-stock-card::after {
+  content: "";
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  right: -55px;
+  top: -55px;
+  border-radius: 999px;
+  opacity: 0.24;
+  pointer-events: none;
+}
+
+/* VERDE = OK */
+
+.embalagens-stock-card.embalagens-stock-ok {
+  background: linear-gradient(135deg, #ecfdf3, #dcfce7) !important;
+  border-color: #86efac !important;
+  box-shadow: 0 16px 42px rgba(22, 163, 74, 0.16) !important;
+}
+
+.embalagens-stock-card.embalagens-stock-ok::after {
+  background: #22c55e;
+}
+
+.embalagens-stock-card.embalagens-stock-ok span,
+.embalagens-stock-card.embalagens-stock-ok strong,
+.embalagens-stock-card.embalagens-stock-ok small {
+  color: #166534 !important;
+}
+
+/* AMARELO = ATENÇÃO */
+
+.embalagens-stock-card.embalagens-stock-warning {
+  background: linear-gradient(135deg, #fff7ed, #ffedd5) !important;
+  border-color: #fdba74 !important;
+  box-shadow: 0 16px 42px rgba(249, 115, 22, 0.18) !important;
+}
+
+.embalagens-stock-card.embalagens-stock-warning::after {
+  background: #f97316;
+}
+
+.embalagens-stock-card.embalagens-stock-warning span,
+.embalagens-stock-card.embalagens-stock-warning strong,
+.embalagens-stock-card.embalagens-stock-warning small {
+  color: #c2410c !important;
+}
+
+/* VERMELHO = CRÍTICO */
+
+.embalagens-stock-card.embalagens-stock-danger {
+  background: linear-gradient(135deg, #fef2f2, #fee2e2) !important;
+  border-color: #fca5a5 !important;
+  box-shadow: 0 16px 42px rgba(220, 38, 38, 0.20) !important;
+}
+
+.embalagens-stock-card.embalagens-stock-danger::after {
+  background: #dc2626;
+}
+
+.embalagens-stock-card.embalagens-stock-danger span,
+.embalagens-stock-card.embalagens-stock-danger strong,
+.embalagens-stock-card.embalagens-stock-danger small {
+  color: #b91c1c !important;
+}
+
+.summary-alert-hint {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+/* ===============================
+   ABAS INTERNAS
+================================ */
+
+.inner-tabs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.inner-tab {
+  min-height: 40px;
+  border: 1px solid #dbe3ef;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #475569;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+
+.inner-tab:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.inner-tab.active {
+  background: #6d28d9;
+  color: #ffffff;
+  border-color: #6d28d9;
+  box-shadow: 0 12px 28px rgba(109, 40, 217, 0.20);
+}
+
+.tab-content {
+  display: block;
+}
+
+/* ===============================
+   TABELA DE EMBALAGENS
+================================ */
+
+#embalagensTable .product-cell {
+  min-width: 250px;
+}
+
+#embalagensTable td:nth-child(6),
+#embalagensTable td:nth-child(7),
+#embalagensTable td:nth-child(10) {
+  font-weight: 900;
+}
+
+#embalagensTable td:nth-child(8) {
+  white-space: nowrap;
+}
+
+/* ===============================
+   KITS
+================================ */
+
+.kit-items {
+  display: grid;
+  gap: 14px;
+}
+
+.kit-item {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.kit-item-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 0.7fr 0.8fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.btn-small {
+  min-height: 40px;
+  padding: 9px 12px;
+  font-size: 12px;
+}
+
+/* ===============================
+   DRAWER ALERTA DE ESTOQUE
+================================ */
+
+#drawerAlertaEstoqueEmbalagens .drawer-header h2 {
+  color: #0f172a;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+#drawerAlertaEstoqueEmbalagens .drawer-header p {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.alert-stock-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.alert-stock-topbar h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 900;
+}
+
+.alert-stock-topbar p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.alert-stock-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.alert-stock-summary > div {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+.alert-stock-summary span {
+  display: block;
+  margin-bottom: 6px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.alert-stock-summary strong {
+  display: block;
+  color: #0f172a;
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.alert-stock-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.alert-stock-table {
+  min-width: 1200px;
+}
+
+.alert-stock-table th,
+.alert-stock-table td {
+  white-space: nowrap;
+}
+
+/* ===============================
+   IMPORTAÇÃO CSV
+================================ */
+
+.import-preview-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.import-edit-table {
+  min-width: 1700px;
+}
+
+.import-edit-table th,
+.import-edit-table td {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.import-edit-input {
+  width: 100%;
+  min-width: 120px;
+  min-height: 36px;
+  border: 1px solid #dbe3ef;
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 700;
+  outline: none;
+  transition: 0.18s ease;
+}
+
+.import-edit-input:focus {
+  border-color: #6d28d9;
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.12);
+}
+
+/* ===============================
+   ESTADO VAZIO
+================================ */
+
+.empty-state-alert {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 26px;
+  text-align: center;
+}
+
+.empty-state-alert strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.empty-state-alert p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===============================
+   RESPONSIVO
+================================ */
+
+@media (max-width: 1100px) {
+  .embalagens-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .kit-item-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .embalagens-summary-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .alert-stock-topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .alert-stock-topbar .btn {
+    width: 100%;
+  }
+
+  .alert-stock-summary {
+    grid-template-columns: 1fr;
+  }
+}

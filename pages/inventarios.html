@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+  <title>Inventário | BALU Food</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/banners.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/estoque.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+</head>
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+        <div class="page-header">
+          <div>
+            <h1>Inventário</h1>
+            <p>Informe apenas a quantidade física. O BALU calcula o valor financeiro do estoque e alimenta o CMV real.</p>
+          </div>
+          <div class="page-actions">
+            <button type="button" class="btn btn-outline" id="btnConferenciaEstoque"><i data-lucide="scan-line"></i> Conferência de Estoque</button>
+            <button type="button" class="btn btn-primary" id="btnFechamentoEstoque"><i data-lucide="clipboard-check"></i> Fechamento de Estoque</button>
+          </div>
+        </div>
+
+        <div class="page-note strategy-note">
+          <div>
+            <strong>Gestão enxuta:</strong>
+            <span>estoque inicial é lançado só na implantação. Depois, o estoque final de um mês vira automaticamente o estoque inicial do mês seguinte.</span>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card green"><span>Estoque inicial da competência</span><strong id="invEstoqueInicial">R$ 0,00</strong><small>Vem do fechamento anterior.</small></div>
+          <div class="kpi-card purple"><span>Compras do mês</span><strong id="invComprasMes">R$ 0,00</strong><small>Compras destinadas ao estoque.</small></div>
+          <div class="kpi-card orange"><span>Estoque final</span><strong id="invEstoqueFinal">R$ 0,00</strong><small>Último fechamento do mês.</small></div>
+          <div class="kpi-card red"><span>CMV real estimado</span><strong id="invCmvReal">R$ 0,00</strong><small>Inicial + compras - final.</small></div>
+        </div>
+
+        <div class="finance-panel">
+          <div class="finance-panel-header">
+            <div><h2>Resumo financeiro do estoque</h2><p>O valor total é separado em Produção, Revendas e Embalagens.</p></div>
+            <span class="badge success">Quantidade Física × Custo Unitário</span>
+          </div>
+          <div class="category-summary">
+            <div class="category-card"><span>Produção</span><strong id="invResumoProducao">R$ 0,00</strong><small>Insumos usados nas fichas.</small></div>
+            <div class="category-card"><span>Revendas</span><strong id="invResumoRevenda">R$ 0,00</strong><small>Produtos comprados para revenda.</small></div>
+            <div class="category-card"><span>Embalagens</span><strong id="invResumoEmbalagens">R$ 0,00</strong><small>Itens de embalagem.</small></div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="cadastro-toolbar">
+            <div class="cadastro-toolbar-left"><input type="search" id="searchInventarios" class="cadastro-search" placeholder="Buscar por mês, tipo ou observação..."></div>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Competência</th><th>Tipo</th><th>Total</th><th>Produção</th><th>Revendas</th><th>Embalagens</th><th>Observações</th><th>Ações</th></tr></thead>
+            <tbody id="inventariosTable"><tr><td colspan="8" class="text-muted">Nenhum inventário registrado ainda.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <aside class="drawer drawer-wide" id="drawerInventario">
+    <div class="drawer-header">
+      <h2 id="drawerInventarioTitle">Fechamento de Estoque</h2>
+      <button type="button" class="drawer-close" onclick="closeDrawer()">×</button>
+    </div>
+    <div class="drawer-body">
+      <form id="formInventario">
+        <input type="hidden" id="inventarioId">
+        <div class="form-section">
+          <h3 class="form-section-title">Informações gerais</h3>
+          <div class="form-grid">
+            <div class="form-field"><label for="inventarioCompetencia">Competência *</label><input type="month" id="inventarioCompetencia" required></div>
+            <div class="form-field"><label for="inventarioTipo">Tipo *</label><select id="inventarioTipo"><option value="Estoque Inicial">Estoque Inicial</option><option value="Fechamento de Estoque">Fechamento de Estoque</option><option value="Conferência de Estoque">Conferência de Estoque</option></select></div>
+            <div class="form-field"><label for="inventarioData">Data</label><input type="date" id="inventarioData"></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <h3 class="form-section-title">Contagem automática</h3>
+          <p class="text-muted form-helper-text">Preencha apenas a coluna Quantidade Física. Na conferência, os itens em branco são ignorados.</p>
+          <div class="inventory-table-wrap"><table class="data-table compact-table"><thead><tr><th>Produto</th><th>Categoria</th><th>Unidade</th><th>Custo unitário</th><th>Estoque ideal</th><th>Quantidade Física</th><th>Valor total</th></tr></thead><tbody id="inventarioItensTable"></tbody></table></div>
+          <div class="calculated-box"><span>Total Geral do Estoque</span><strong id="inventarioTotalPreview">R$ 0,00</strong></div>
+        </div>
+        <div class="form-section"><h3 class="form-section-title">Observações</h3><div class="form-grid"><div class="form-field full"><label for="inventarioObservacoes">Observações</label><textarea id="inventarioObservacoes" placeholder="Ex.: fechamento mensal, contagem parcial de hortifruti, pedido de bebidas..."></textarea></div></div></div>
+      </form>
+    </div>
+    <div class="drawer-footer">
+      <button type="button" class="btn btn-outline" onclick="closeDrawer()">Cancelar</button>
+      <button type="submit" form="formInventario" class="btn btn-primary">Salvar Inventário</button>
+    </div>
+  </aside>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/session.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/banners.js"></script>
+  <script src="../js/inventarios.js"></script>
+</body>
+</html>

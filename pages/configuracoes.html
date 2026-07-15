@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+
+  <title>Configurações | BALU Food</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+  <link rel="stylesheet" href="../css/banners.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+
+
+    <div class="page-header">
+      <div>
+        <h1>Configurações</h1>
+        <p>Gerencie os dados da empresa, plano, preferências e informações do sistema.</p>
+      </div>
+
+      <div class="page-actions">
+        <button type="button" class="btn btn-outline" id="btnRestaurarConfiguracoes">
+          <i data-lucide="rotate-ccw"></i>
+          Restaurar
+        </button>
+
+        <button type="button" class="btn btn-primary" id="btnSalvarConfiguracoesTopo">
+          <i data-lucide="save"></i>
+          Salvar Configurações
+        </button>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card purple">
+        <span>Empresa</span>
+        <strong id="configResumoEmpresa">Empresa Teste BALU</strong>
+        <small>Nome exibido no sistema.</small>
+      </div>
+
+      <div class="kpi-card green">
+        <span>Plano atual</span>
+        <strong id="configResumoPlano">BALU Food</strong>
+        <small>R$ 250,00/mês.</small>
+      </div>
+
+      <div class="kpi-card orange">
+        <span>Status</span>
+        <strong id="configResumoStatus">Ativo</strong>
+        <small>Status de uso da conta.</small>
+      </div>
+
+      <div class="kpi-card red">
+        <span>Pagamento</span>
+        <strong id="configResumoPagamento">Em dia</strong>
+        <small>Controle interno da assinatura.</small>
+      </div>
+    </div>
+
+    <form id="formConfiguracoes">
+
+      <div class="finance-panel">
+        <div class="finance-panel-header">
+          <div>
+            <h2>Dados da empresa</h2>
+            <p>Essas informações identificam o cliente dentro do BALU Food.</p>
+          </div>
+
+          <span class="badge purple">Empresa</span>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field full">
+            <label for="configNomeEmpresa">Nome da empresa *</label>
+            <input type="text" id="configNomeEmpresa" placeholder="Ex: Marmitaria da Ana" required>
+          </div>
+
+          <div class="form-field">
+            <label for="configCnpj">CNPJ</label>
+            <input type="text" id="configCnpj" placeholder="00.000.000/0001-00">
+          </div>
+
+          <div class="form-field">
+            <label for="configSegmento">Segmento</label>
+            <select id="configSegmento">
+              <option value="">Selecione</option>
+              <option value="Restaurante">Restaurante</option>
+              <option value="Marmitaria">Marmitaria</option>
+              <option value="Lanchonete">Lanchonete</option>
+              <option value="Hamburgueria">Hamburgueria</option>
+              <option value="Pizzaria">Pizzaria</option>
+              <option value="Confeitaria">Confeitaria</option>
+              <option value="Buffet">Buffet</option>
+              <option value="Delivery">Delivery</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="configUnidade">Unidade</label>
+            <select id="configUnidade">
+              <option value="Matriz">Matriz</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="configResponsavel">Responsável *</label>
+            <input type="text" id="configResponsavel" placeholder="Ex: Lucas Gabriel" required>
+          </div>
+
+          <div class="form-field">
+            <label for="configTelefone">Telefone / WhatsApp</label>
+            <input type="text" id="configTelefone" placeholder="(11) 99999-9999">
+          </div>
+
+          <div class="form-field">
+            <label for="configEmail">E-mail</label>
+            <input type="email" id="configEmail" placeholder="contato@empresa.com.br">
+          </div>
+
+          <div class="form-field">
+            <label for="configCidade">Cidade</label>
+            <input type="text" id="configCidade" placeholder="Ex: Guarulhos">
+          </div>
+
+          <div class="form-field full">
+            <p class="config-logo-hint">Para a logo do cliente, use preferencialmente PNG com fundo transparente. O resultado fica mais limpo na barra lateral e nas telas administrativas.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="finance-panel">
+        <div class="finance-panel-header">
+          <div>
+            <h2>Plano e assinatura</h2>
+            <p>Controle administrativo da assinatura fixa do cliente.</p>
+          </div>
+
+          <span class="badge green">Assinatura</span>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="configPlano">Plano *</label>
+            <select id="configPlano" required>
+              <option value="BALU Food">BALU Food - R$ 250,00/mês</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="configCicloPlano">Ciclo de pagamento</label>
+            <select id="configCicloPlano">
+              <option value="Mensal">Mensal - R$ 250,00</option>
+              <option value="Trimestral">Trimestral - R$ 675,00</option>
+              <option value="Anual">Anual - R$ 2.500,00</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="configValorPlano">Valor do ciclo</label>
+            <input type="text" id="configValorPlano" inputmode="decimal" value="250,00" readonly>
+          </div>
+
+          <div class="form-field">
+            <label for="configFormaPagamento">Forma de pagamento</label>
+            <select id="configFormaPagamento">
+              <option value="Cartão de crédito">Cartão de crédito</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="configStatusConta">Status da conta</label>
+            <select id="configStatusConta">
+              <option value="Ativo">Ativo</option>
+              <option value="Trial">Trial</option>
+              <option value="Bloqueado">Bloqueado</option>
+              <option value="Cancelamento solicitado">Cancelamento solicitado</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="configStatusPagamento">Status do pagamento</label>
+            <select id="configStatusPagamento">
+              <option value="Em dia">Em dia</option>
+              <option value="Pendente">Pendente</option>
+              <option value="Atrasado">Atrasado</option>
+              <option value="Isento">Isento</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="configDataInicio">Data de início</label>
+            <input type="date" id="configDataInicio">
+          </div>
+
+          <div class="form-field">
+            <label for="configProximoVencimento">Próximo vencimento</label>
+            <input type="date" id="configProximoVencimento">
+          </div>
+          <div class="form-field full">
+            <div class="config-logo-hint">
+              O cliente pode escolher continuar, solicitar cancelamento ou mudar o ciclo do plano. No MVP, essas ações atualizam o status localmente. Em produção, o backend controla assinatura, pagamento e bloqueio.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="finance-panel">
+        <div class="finance-panel-header">
+          <div>
+            <h2>Preferências operacionais</h2>
+            <p>Defina metas usadas nos cálculos e relatórios do sistema.</p>
+          </div>
+
+          <span class="badge orange">Operação</span>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="configCmvIdeal">CMV ideal (%)</label>
+            <input type="text" id="configCmvIdeal" inputmode="decimal" placeholder="Ex: 30">
+          </div>
+
+          <div class="form-field">
+            <label for="configMargemMinima">Margem mínima (%)</label>
+            <input type="text" id="configMargemMinima" inputmode="decimal" placeholder="Ex: 20">
+          </div>
+
+          <div class="form-field">
+            <label for="configMarkupPadrao">Markup padrão</label>
+            <input type="text" id="configMarkupPadrao" inputmode="decimal" placeholder="Ex: 3">
+          </div>
+
+          <div class="form-field">
+            <label for="configMoeda">Moeda</label>
+            <select id="configMoeda">
+              <option value="BRL">Real Brasileiro - R$</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="configEstoqueBaixo">Alerta de estoque baixo</label>
+            <select id="configEstoqueBaixo">
+              <option value="Ativo">Ativo</option>
+              <option value="Inativo">Inativo</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="configCmvAlerta">Alerta de CMV alto</label>
+            <select id="configCmvAlerta">
+              <option value="Ativo">Ativo</option>
+              <option value="Inativo">Inativo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="finance-panel">
+        <div class="finance-panel-header">
+          <div>
+            <h2>Observações internas</h2>
+            <p>Campo livre para anotações administrativas sobre o cliente.</p>
+          </div>
+
+          <span class="badge purple">Interno</span>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field full">
+            <label for="configObservacoes">Observações</label>
+            <textarea id="configObservacoes" placeholder="Ex: suporte mensal incluso, preferências administrativas, observações do atendimento..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-footer" style="position: static; border-radius: 18px; margin-top: 18px;">
+        <button type="button" class="btn btn-outline" id="btnLimparConfiguracoes">
+          <i data-lucide="trash-2"></i>
+          Limpar
+        </button>
+
+        <div class="drawer-footer-actions">
+          <button type="submit" class="btn btn-primary">
+            <i data-lucide="save"></i>
+            Salvar Configurações
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+  </section>
+</main>
+
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script src="../js/app.js"></script>
+
+  <script src="../js/session.js"></script>
+
+  <script src="../js/layout.js"></script>
+
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/banners.js"></script>
+  
+
+
+  <script src="../js/configuracoes.js"></script>
+
+</body>
+</html>
+

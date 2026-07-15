@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+
+  <title>Relatórios | BALU Food</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/banners.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/estoque.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+
+    <div class="page-header">
+      <div>
+        <h1>Relatórios</h1>
+        <p>Resumo enxuto com faturamento, custos, compras, estoque, CMV teórico, CMV real e lucro estimado.</p>
+      </div>
+
+      <div class="page-actions">
+        <select id="relatorioPeriodo" class="cadastro-filter">
+          <option value="mes_atual">Mês atual</option>
+          <option value="ultimos_30">Últimos 30 dias</option>
+          <option value="todos">Todos os dados</option>
+        </select>
+
+        <button type="button" class="btn btn-outline" id="btnAtualizarRelatorios">
+          <i data-lucide="refresh-cw"></i>
+          Atualizar
+        </button>
+
+        <button type="button" class="btn btn-primary" id="btnExportarRelatorios">
+          <i data-lucide="download"></i>
+          Exportar
+        </button>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card purple">
+        <span>Compras no período</span>
+        <strong id="relatorioTotalCompras">R$ 0,00</strong>
+        <small id="relatorioQtdCompras">0 compras registradas.</small>
+      </div>
+
+      <div class="kpi-card green">
+        <span>Valor em estoque</span>
+        <strong id="relatorioValorEstoque">R$ 0,00</strong>
+        <small>Insumos e embalagens cadastrados.</small>
+      </div>
+
+      <div class="kpi-card orange">
+        <span>CMV real</span>
+        <strong id="relatorioCmvReal">0,00%</strong>
+        <small id="relatorioCmvStatus">Sem fechamento no período.</small>
+      </div>
+
+      <div class="kpi-card red">
+        <span>Pontos de atenção</span>
+        <strong id="relatorioPontosAtencao">0</strong>
+        <small>Estoque baixo, margem baixa ou CMV alto.</small>
+      </div>
+    </div>
+
+    <div class="finance-panel">
+      <div class="finance-panel-header">
+        <div>
+          <h2>Visão geral da operação</h2>
+          <p>Consolidação dos principais dados cadastrados no sistema.</p>
+        </div>
+
+        <span class="badge purple">Resumo</span>
+      </div>
+
+      <div class="category-summary">
+        <div class="category-card">
+          <span>Insumos cadastrados</span>
+          <strong id="relatorioTotalInsumos">0</strong>
+          <small id="relatorioInsumosValor">R$ 0,00 em estoque.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Embalagens cadastradas</span>
+          <strong id="relatorioTotalEmbalagens">0</strong>
+          <small id="relatorioEmbalagensValor">R$ 0,00 em estoque.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Funcionários</span>
+          <strong id="relatorioTotalFuncionarios">0</strong>
+          <small id="relatorioCustoMaoObra">R$ 0,00 de custo estimado.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Inventários</span>
+          <strong id="relatorioTotalInventarios">0</strong>
+          <small id="relatorioUltimoInventario">Nenhum inventário encontrado.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Fichas técnicas</span>
+          <strong id="relatorioTotalFichas">0</strong>
+          <small id="relatorioFichasMedia">Custo médio R$ 0,00.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Vendas / Produção</span>
+          <strong id="relatorioTotalVendasProducao">0</strong>
+          <small id="relatorioVendasProducaoResumo">Nenhum registro encontrado.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Faturamento</span>
+          <strong id="relatorioFaturamentoTotal">R$ 0,00</strong>
+          <small id="relatorioFaturamentoResumo">0 lançamento(s) no período.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Custos fixos/variáveis</span>
+          <strong id="relatorioCustosOperacionaisTotal">R$ 0,00</strong>
+          <small id="relatorioCustosOperacionaisResumo">0,00% do faturamento.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Fornecedores</span>
+          <strong id="relatorioTotalFornecedores">0</strong>
+          <small id="relatorioFornecedoresResumo">0 fornecedor(es) cadastrado(s).</small>
+        </div>
+
+        <div class="category-card">
+          <span>Produtos / Cardápio</span>
+          <strong id="relatorioTotalProdutos">0</strong>
+          <small id="relatorioProdutosResumo">0 produto(s) ativo(s).</small>
+        </div>
+
+        <div class="category-card">
+          <span>Fechamentos CMV</span>
+          <strong id="relatorioTotalCmv">0</strong>
+          <small id="relatorioCmvResumo">Nenhum fechamento encontrado.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Produção planejada</span>
+          <strong id="relatorioTotalProducaoPlanejada">0</strong>
+          <small id="relatorioProducaoPlanejadaResumo">0 registro(s) em aberto.</small>
+        </div>
+
+        <div class="category-card">
+          <span>Saúde operacional</span>
+          <strong id="relatorioSaudeOperacional">Sem dados</strong>
+          <small>Baseado no CMV e estoque.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="finance-grid">
+      <div class="finance-panel">
+        <div class="finance-panel-header">
+          <div>
+            <h2>Central de atenções</h2>
+            <p>O que precisa de análise ou ação do cliente.</p>
+          </div>
+
+          <span class="badge orange">Alertas</span>
+        </div>
+
+        <div class="attention-list" id="relatorioListaAtencoes">
+          <div class="attention-item">
+            <div class="attention-icon info">
+              <i data-lucide="info"></i>
+            </div>
+
+            <div>
+              <strong>Sem alertas no momento</strong>
+              <span>Cadastre dados nos módulos para gerar análises.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="finance-panel">
+        <div class="finance-panel-header">
+          <div>
+            <h2>Indicadores rápidos</h2>
+            <p>Resumo de performance para tomada de decisão.</p>
+          </div>
+
+          <span class="badge green">KPIs</span>
+        </div>
+
+        <div class="operation-health">
+          <div class="health-row">
+            <span>Estoque baixo</span>
+            <strong id="relatorioEstoqueBaixo">0 itens</strong>
+          </div>
+
+          <div class="health-row">
+            <span>Compras pendentes</span>
+            <strong id="relatorioComprasPendentes">0</strong>
+          </div>
+
+          <div class="health-row">
+            <span>CMV acima do ideal</span>
+            <strong id="relatorioCmvAlto">Não</strong>
+          </div>
+
+          <div class="health-row">
+            <span>Receitas com margem baixa</span>
+            <strong id="relatorioFichasAtencao">0</strong>
+          </div>
+
+          <div class="health-row">
+            <span>Última atualização</span>
+            <strong id="relatorioUltimaAtualizacao">Agora</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="finance-panel-header">
+        <div>
+          <h2>Compras recentes</h2>
+          <p>Últimas compras registradas e impacto no CMV.</p>
+        </div>
+
+        <span class="badge purple">Compras</span>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Fornecedor</th>
+            <th>Categoria</th>
+            <th>Status</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+
+        <tbody id="relatorioComprasTable">
+          <tr>
+            <td colspan="5" class="text-muted">Nenhuma compra encontrada.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-card">
+      <div class="finance-panel-header">
+        <div>
+          <h2>Vendas / Produção</h2>
+          <p>Registros manuais confirmados, pendentes ou cancelados e seus custos estimados.</p>
+        </div>
+
+        <span class="badge green">Baixa de estoque</span>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Canal</th>
+            <th>Status</th>
+            <th>Custo estimado</th>
+          </tr>
+        </thead>
+
+        <tbody id="relatorioVendasProducaoTable">
+          <tr>
+            <td colspan="6" class="text-muted">Nenhuma venda ou produção encontrada.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-card">
+      <div class="finance-panel-header">
+        <div>
+          <h2>Estoque de insumos e embalagens</h2>
+          <p>Quantidade física e valor financeiro dos itens cadastrados.</p>
+        </div>
+
+        <span class="badge orange">Estoque</span>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Tipo</th>
+            <th>Estoque atual</th>
+            <th>Estoque mínimo</th>
+            <th>Valor estoque</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody id="relatorioEstoqueTable">
+          <tr>
+            <td colspan="6" class="text-muted">Nenhum item em atenção encontrado.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-card">
+      <div class="finance-panel-header">
+        <div>
+          <h2>Fichas técnicas em atenção</h2>
+          <p>Receitas com margem baixa, prejuízo ou CMV elevado.</p>
+        </div>
+
+        <span class="badge red">Precificação</span>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Receita</th>
+            <th>Categoria</th>
+            <th>Custo por porção</th>
+            <th>Preço venda</th>
+            <th>CMV</th>
+            <th>Margem</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody id="relatorioFichasTable">
+          <tr>
+            <td colspan="7" class="text-muted">Nenhuma ficha técnica em atenção.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+</main>
+
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script src="../js/app.js"></script>
+
+  <script src="../js/session.js"></script>
+
+  <script src="../js/layout.js"></script>
+
+  <script src="../js/auth-guard.js"></script>
+
+  <script src="../js/banners.js"></script>
+
+  <script src="../js/relatorios.js"></script>
+
+</body>
+</html>
+

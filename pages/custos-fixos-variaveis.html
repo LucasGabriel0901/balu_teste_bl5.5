@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+  <title>Custos Fixos e Variáveis | BALU Food</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/banners.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+        <div class="page-header">
+          <div>
+            <h1>Custos Fixos e Variáveis</h1>
+            <p>Cadastre a estrutura uma vez e, todo mês, preencha apenas os valores gastos. O BALU calcula o percentual operacional automaticamente.</p>
+          </div>
+
+          <div class="page-actions">
+            <button type="button" class="btn btn-outline" id="btnPlanoDespesas">
+              <i data-lucide="list-plus"></i>
+              Plano de Despesas
+            </button>
+
+            <button type="button" class="btn btn-primary" id="btnRegistrarCustosMes">
+              <i data-lucide="plus"></i>
+              Registrar Custos do Mês
+            </button>
+          </div>
+        </div>
+
+        <div class="page-note strategy-note">
+          <div>
+            <strong>Sem financeiro complexo:</strong>
+            <span>esta aba não controla boletos, vencimentos ou contas a pagar. Ela gera indicadores gerenciais para Dashboard, Precificação e Relatórios.</span>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card green">
+            <span>Custo operacional total</span>
+            <strong id="custosTotalMes">R$ 0,00</strong>
+            <small>Mês selecionado.</small>
+          </div>
+
+          <div class="kpi-card purple">
+            <span>% sobre faturamento médio</span>
+            <strong id="custosPercentualMes">0,00%</strong>
+            <small>Indicador usado na precificação.</small>
+          </div>
+
+          <div class="kpi-card orange">
+            <span>Média dos custos</span>
+            <strong id="custosMediaOperacional">R$ 0,00</strong>
+            <small>Com base no período configurado no faturamento.</small>
+          </div>
+
+          <div class="kpi-card red">
+            <span>Último fechamento</span>
+            <strong id="custosUltimoFechamento">-</strong>
+            <small>Mês/ano do último custo registrado.</small>
+          </div>
+        </div>
+
+        <div class="finance-panel">
+          <div class="finance-panel-header">
+            <div>
+              <h2>Resumo do mês</h2>
+              <p>O sistema classifica automaticamente cada despesa como fixa ou variável usando o plano gerencial.</p>
+            </div>
+            <span class="badge success">Despesa × Valor</span>
+          </div>
+
+          <div class="category-summary">
+            <div class="category-card">
+              <span>Custos fixos</span>
+              <strong id="custosFixosMes">R$ 0,00</strong>
+              <small>Aluguel, sistemas, contabilidade e similares.</small>
+            </div>
+            <div class="category-card">
+              <span>Custos variáveis</span>
+              <strong id="custosVariaveisMes">R$ 0,00</strong>
+              <small>Taxas, marketing, manutenção e variações.</small>
+            </div>
+            <div class="category-card">
+              <span>Faturamento médio base</span>
+              <strong id="custosFaturamentoBase">R$ 0,00</strong>
+              <small>Puxado automaticamente do módulo Faturamento.</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="finance-panel">
+          <div class="finance-panel-header">
+            <div>
+              <h2>Evolução dos custos</h2>
+              <p>Histórico mensal dos fechamentos de custos operacionais.</p>
+            </div>
+          </div>
+          <div class="simple-bar-chart" id="custosGraficoMensal"></div>
+        </div>
+
+        <div class="table-card">
+          <div class="cadastro-toolbar">
+            <div class="cadastro-toolbar-left">
+              <input type="search" id="searchCustos" class="cadastro-search" placeholder="Buscar por mês, despesa ou observação...">
+            </div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Mês</th>
+                <th>Total</th>
+                <th>Fixos</th>
+                <th>Variáveis</th>
+                <th>% Operacional</th>
+                <th>Observações</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="custosTable">
+              <tr><td colspan="7" class="text-muted">Nenhum fechamento de custos registrado ainda.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <aside class="drawer" id="drawerPlanoDespesas">
+    <div class="drawer-header">
+      <h2>Plano Gerencial de Despesas</h2>
+      <button type="button" class="drawer-close" onclick="closeDrawer()">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="form-section">
+        <div class="section-row-title">
+          <h3 class="form-section-title">Despesas cadastradas</h3>
+          <button type="button" class="btn btn-outline btn-small" id="btnAdicionarDespesaPlano">
+            <i data-lucide="plus"></i>
+            Adicionar despesa
+          </button>
+        </div>
+        <p class="text-muted form-helper-text">Esse cadastro é feito uma vez. No fechamento mensal o usuário verá apenas Despesa × Valor.</p>
+        <div class="simple-entry-table" id="planoDespesasContainer"></div>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <button type="button" class="btn btn-outline" onclick="closeDrawer()">Cancelar</button>
+      <button type="button" class="btn btn-primary" id="btnSalvarPlanoDespesas">Salvar Plano</button>
+    </div>
+  </aside>
+
+  <aside class="drawer" id="drawerCustosMes">
+    <div class="drawer-header">
+      <h2 id="drawerCustosTitle">Registrar Custos do Mês</h2>
+      <button type="button" class="drawer-close" onclick="closeDrawer()">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <form id="formCustosMes">
+        <input type="hidden" id="custoFechamentoId">
+        <div class="form-section">
+          <h3 class="form-section-title">Informações gerais</h3>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="custoCompetencia">Mês de referência *</label>
+              <input type="month" id="custoCompetencia" required>
+            </div>
+            <div class="form-field">
+              <label for="custoRegistradoPor">Registrado por</label>
+              <input type="text" id="custoRegistradoPor" readonly>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section-title">Tabela de preenchimento</h3>
+          <p class="text-muted form-helper-text">Preencha somente o valor gasto no mês. Grupo e natureza já vêm do plano gerencial.</p>
+          <div class="simple-entry-table" id="custosMesContainer"></div>
+          <div class="calculated-box compact">
+            <span>Total de custos do mês</span>
+            <strong id="custosTotalPreview">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section-title">Observações</h3>
+          <div class="form-grid">
+            <div class="form-field full">
+              <label for="custoObservacoes">Observações do mês</label>
+              <textarea id="custoObservacoes" placeholder="Ex.: reforma, compra extraordinária, troca de fornecedor, mudança de aluguel..."></textarea>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="drawer-footer">
+      <button type="button" class="btn btn-outline" onclick="closeDrawer()">Cancelar</button>
+      <button type="submit" form="formCustosMes" class="btn btn-primary">Salvar Fechamento</button>
+    </div>
+  </aside>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/session.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/banners.js"></script>
+  <script src="../js/custos-fixos-variaveis.js"></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+  <title>Produtos / Cardápio | BALU Food</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/banners.css">
+  <link rel="stylesheet" href="../css/cadastros.css">
+  <link rel="stylesheet" href="../css/financeiro.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+        <div class="page-header">
+          <div>
+            <h1>Produtos / Cardápio</h1>
+            <p>Organize os produtos vendidos e vincule cada item à sua ficha técnica.</p>
+          </div>
+
+          <div class="page-actions">
+            <button type="button" class="btn btn-primary" id="btnNovoProduto">
+              <i data-lucide="plus"></i>
+              Novo Produto
+            </button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card green">
+            <span>Total de produtos</span>
+            <strong id="produtosTotal">0</strong>
+            <small>Itens no cardápio.</small>
+          </div>
+
+          <div class="kpi-card purple">
+            <span>Produtos ativos</span>
+            <strong id="produtosAtivos">0</strong>
+            <small>Disponíveis para venda.</small>
+          </div>
+
+          <div class="kpi-card orange">
+            <span>Produtos sem ficha</span>
+            <strong id="produtosSemFicha">0</strong>
+            <small>Precisam de ficha técnica vinculada.</small>
+          </div>
+
+          <div class="kpi-card red">
+            <span>Preço médio</span>
+            <strong id="produtosPrecoMedio">R$ 0,00</strong>
+            <small>Média dos preços cadastrados.</small>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Categoria</th>
+                <th>Ficha técnica vinculada</th>
+                <th>Preço de venda</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+
+            <tbody id="produtosTable">
+              <tr>
+                <td colspan="6" class="text-muted">Nenhum produto cadastrado ainda.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <aside class="drawer" id="drawerProduto">
+    <div class="drawer-header">
+      <h2 id="drawerProdutoTitle">Novo Produto</h2>
+      <button type="button" class="drawer-close" onclick="closeDrawer()">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <form id="formProduto">
+        <input type="hidden" id="produtoId">
+
+        <div class="form-section">
+          <h3 class="form-section-title">Dados do produto</h3>
+
+          <div class="form-grid">
+            <div class="form-field full">
+              <label for="produtoNome">Nome do produto *</label>
+              <input type="text" id="produtoNome" required>
+            </div>
+
+            <div class="form-field">
+              <label for="produtoCategoria">Categoria</label>
+              <input type="text" id="produtoCategoria" placeholder="Ex: Marmitas, Lanches">
+            </div>
+
+            <div class="form-field">
+              <label for="produtoFicha">Ficha técnica vinculada</label>
+              <select id="produtoFicha">
+                <option value="">Sem ficha vinculada</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="produtoPreco">Preço de venda</label>
+              <input type="number" id="produtoPreco" min="0" step="0.01">
+            </div>
+
+            <div class="form-field">
+              <label for="produtoStatus">Status</label>
+              <select id="produtoStatus">
+                <option value="Ativo">Ativo</option>
+                <option value="Inativo">Inativo</option>
+                <option value="Em revisão">Em revisão</option>
+              </select>
+            </div>
+
+            <div class="form-field full">
+              <label for="produtoObservacoes">Observações</label>
+              <textarea id="produtoObservacoes"></textarea>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="drawer-footer">
+      <button type="button" class="btn btn-outline" onclick="closeDrawer()">Cancelar</button>
+      <button type="submit" form="formProduto" class="btn btn-primary">Salvar Produto</button>
+    </div>
+  </aside>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/session.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/banners.js"></script>
+  <script src="../js/produtos.js"></script>
+</body>
+</html>

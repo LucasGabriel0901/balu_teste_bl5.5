@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add('balu-protected-page');</script>
+
+  <title>Dashboard | BALU Food</title>
+
+  <!-- Fonte -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- CSS Global -->
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/banners.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  
+</head>
+
+<body>
+  <div class="app-shell">
+    <main class="main-wrapper">
+      <section class="page">
+
+
+    <!-- Cabeçalho da página -->
+    <div class="page-header">
+      <div>
+        <h1>Dashboard</h1>
+        <p>Pare de usar 10 planilhas: acompanhe faturamento, compras, estoque, CMV teórico, CMV real e lucro estimado em um só lugar.</p>
+      </div>
+
+      <div class="page-actions">
+        <button type="button" class="btn btn-outline">
+          <i data-lucide="calendar-days"></i>
+          Junho/2026
+        </button>
+
+        <button type="button" class="btn btn-primary">
+          <i data-lucide="refresh-cw"></i>
+          Atualizar dados
+        </button>
+      </div>
+    </div>
+
+    <!-- Cards principais -->
+    <div class="kpi-grid">
+      <div class="kpi-card green">
+        <span>Faturamento do mês</span>
+        <strong id="kpiFaturamento">R$ 0,00</strong>
+        <small>Soma dos canais informados no mês.</small>
+      </div>
+
+      <div class="kpi-card orange">
+        <span>Compras do mês</span>
+        <strong id="kpiCompras">R$ 0,00</strong>
+        <small>Compras confirmadas que impactam o custo.</small>
+      </div>
+
+      <div class="kpi-card purple">
+        <span>CMV Real</span>
+        <strong id="kpiCmv">R$ 0,00</strong>
+        <small>Custo real consumido no período.</small>
+      </div>
+
+      <div class="kpi-card red">
+        <span>CMV %</span>
+        <strong id="kpiCmvPercent">0,00%</strong>
+        <small>Indicador central da saúde da operação.</small>
+      </div>
+    </div>
+
+    <div class="dashboard-panel strategy-card-panel">
+      <div class="dashboard-panel-header">
+        <div>
+          <h2>BALU como gestão enxuta, não PDV</h2>
+          <p>O cliente preenche poucos dados no fim do mês e o BALU transforma isso em indicadores para saber se houve lucro ou prejuízo.</p>
+        </div>
+        <span class="badge success">Menos planilhas, mais decisão</span>
+      </div>
+
+      <div class="quick-summary">
+        <div class="quick-card">
+          <small>1. Faturamento manual</small>
+          <strong>Por canal de venda</strong>
+        </div>
+        <div class="quick-card">
+          <small>2. Compras + estoque</small>
+          <strong>CMV real do mês</strong>
+        </div>
+        <div class="quick-card">
+          <small>3. Fichas técnicas</small>
+          <strong>CMV teórico e preço</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-panel strategy-card-panel intelligent-analysis-panel">
+      <div class="dashboard-panel-header">
+        <div>
+          <h2>Análise Inteligente BALU</h2>
+          <p>Regras matemáticas transformam os dados preenchidos em recomendações simples para o gestor.</p>
+        </div>
+        <span class="badge purple">Análise automática</span>
+      </div>
+      <div id="dashboardAnaliseInteligente" class="analysis-list">
+        <div class="empty-state-alert compact">
+          <strong>Aguardando dados.</strong>
+          <p>Preencha faturamento, compras e estoque final para gerar recomendações.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid principal -->
+    <div class="dashboard-grid">
+
+      <!-- Coluna principal -->
+      <div class="dashboard-column">
+
+        <!-- Painel de CMV -->
+        <div class="dashboard-panel">
+          <div class="dashboard-panel-header">
+            <div>
+              <h2>Resumo do CMV Real</h2>
+              <p>Dados calculados a partir dos registros salvos no navegador.</p>
+            </div>
+
+            <span id="kpiCmvStatus" class="badge warning">Aguardando cálculo</span>
+          </div>
+
+          <div class="cmv-highlight">
+            <div>
+              <span class="text-muted">CMV Real do período</span>
+
+              <div class="cmv-value" id="cmvHighlightValue">
+                R$ 0,00
+              </div>
+
+              <p class="cmv-description">
+                O CMV real é calculado com base no estoque inicial do mês,
+                compras realizadas no período e estoque final informado no inventário.
+              </p>
+
+              <div class="quick-summary">
+                <div class="quick-card">
+                  <small>Estoque Inicial</small>
+                  <strong id="dashEstoqueInicial">R$ 0,00</strong>
+                </div>
+
+                <div class="quick-card">
+                  <small>Compras</small>
+                  <strong id="dashComprasMes">R$ 0,00</strong>
+                </div>
+
+                <div class="quick-card">
+                  <small>Estoque Final</small>
+                  <strong id="dashEstoqueFinal">R$ 0,00</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="cmv-meter">
+              <div class="cmv-meter-content">
+                <strong id="cmvMeterPercent">0%</strong>
+                <span>CMV</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfico / evolução -->
+        <div class="dashboard-panel">
+          <div class="dashboard-panel-header">
+            <div>
+              <h3>Evolução do CMV</h3>
+              <p>Comparativo visual dos últimos meses.</p>
+            </div>
+
+            <button type="button" class="btn btn-outline btn-small">
+              Ver relatório
+            </button>
+          </div>
+
+          <div class="chart-placeholder" id="cmvChartPlaceholder">
+            Nenhum histórico de CMV salvo ainda.
+          </div>
+        </div>
+
+        <!-- Tabela de últimas compras -->
+        <div class="dashboard-panel">
+          <div class="dashboard-panel-header">
+            <div>
+              <h3>Últimas compras registradas</h3>
+              <p>Compras confirmadas e pendentes do período.</p>
+            </div>
+
+            <a href="compras-realizadas.html" class="btn btn-outline btn-small">
+              Abrir compras
+            </a>
+          </div>
+
+          <div class="table-card" style="box-shadow: none; padding: 0; border: none;">
+            <table class="dashboard-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Item</th>
+                  <th>Tipo</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody id="dashboardComprasTable">
+                <tr>
+                  <td colspan="5" class="text-muted">
+                    Nenhuma compra carregada ainda.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Coluna lateral -->
+      <div class="dashboard-column">
+
+        <!-- Atalhos -->
+        <div class="dashboard-panel">
+          <div class="dashboard-panel-header">
+            <div>
+              <h3>Ações rápidas</h3>
+              <p>Acesse somente o que o cliente precisa preencher para analisar lucro no fim do mês.</p>
+            </div>
+          </div>
+
+          <div class="shortcut-grid">
+            <a href="cadastro-insumos.html" class="shortcut-card">
+              <i data-lucide="package"></i>
+              <strong>Insumos</strong>
+              <span>Cadastro de ingredientes e preços médios.</span>
+            </a>
+
+            <a href="cadastro-embalagens.html" class="shortcut-card">
+              <i data-lucide="box"></i>
+              <strong>Embalagens</strong>
+              <span>Controle de embalagens e custo unitário.</span>
+            </a>
+
+            <a href="inventarios.html" class="shortcut-card">
+              <i data-lucide="clipboard-list"></i>
+              <strong>Inventários</strong>
+              <span>Estoque inicial, parcial e final.</span>
+            </a>
+
+            <a href="cmv-real-mensal.html" class="shortcut-card">
+              <i data-lucide="bar-chart-3"></i>
+              <strong>CMV Real</strong>
+              <span>Fechamento do custo real mensal.</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Atenções -->
+        <div class="dashboard-panel">
+          <div class="dashboard-panel-header">
+            <div>
+              <h3>Central de atenções</h3>
+              <p>Pontos importantes da operação.</p>
+            </div>
+          </div>
+
+          <div class="attention-list">
+            <div class="attention-item">
+              <div class="attention-icon warning">
+                <i data-lucide="alert-triangle"></i>
+              </div>
+
+              <div class="attention-content">
+                <strong>Inventário inicial obrigatório</strong>
+                <span>
+                  O cliente precisa fazer o inventário físico no início do mês para calcular o estoque inicial.
+                </span>
+              </div>
+            </div>
+
+            <div class="attention-item">
+              <div class="attention-icon success">
+                <i data-lucide="check-circle"></i>
+              </div>
+
+              <div class="attention-content">
+                <strong>Compras alimentam o CMV</strong>
+                <span>
+                  Compras confirmadas entram no cálculo do mês selecionado.
+                </span>
+              </div>
+            </div>
+
+            <div class="attention-item">
+              <div class="attention-icon danger">
+                <i data-lucide="shield-alert"></i>
+              </div>
+
+              <div class="attention-content">
+                <strong>Cálculo oficial no backend</strong>
+                <span>
+                  Registre inventários e compras confirmadas para acompanhar o CMV real.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Saúde da operação -->
+        <div class="dashboard-panel">
+          <div class="dashboard-panel-header">
+            <div>
+              <h3>Saúde da operação</h3>
+              <p>Indicadores calculados a partir dos cadastros existentes.</p>
+            </div>
+          </div>
+
+          <div class="operation-health">
+            <div class="health-row">
+              <div>
+                <span>Inventários preenchidos</span>
+                <div class="health-bar">
+                  <div class="health-bar-fill" style="width: 70%;"></div>
+                </div>
+              </div>
+              <strong>70%</strong>
+            </div>
+
+            <div class="health-row">
+              <div>
+                <span>Compras registradas</span>
+                <div class="health-bar">
+                  <div class="health-bar-fill warning" style="width: 55%;"></div>
+                </div>
+              </div>
+              <strong>55%</strong>
+            </div>
+
+            <div class="health-row">
+              <div>
+                <span>Fechamento CMV</span>
+                <div class="health-bar">
+                  <div class="health-bar-fill danger" style="width: 25%;"></div>
+                </div>
+              </div>
+              <strong>25%</strong>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+</main>
+
+
+  </div>
+
+  <!-- Ícones -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script src="../js/app.js"></script>
+
+<script src="../js/session.js"></script>
+
+<script src="../js/auth-guard.js"></script>
+
+<script src="../js/layout.js"></script>
+
+<script src="../js/banners.js"></script>
+
+<script src="../js/dashboard.js"></script>
+
+</body>
+</html>
+
